@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>You Are The Only One</title>
+    <style>
+        body { margin: 0; background-color: #000000; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; font-family: Arial, sans-serif; }
+        canvas { display: block; }
+        #click-screen { position: absolute; color: #ff69b4; font-size: 20px; cursor: pointer; text-align: center; background: rgba(0,0,0,0.85); padding: 20px; border-radius: 10px; border: 1px solid #ff1493; box-shadow: 0 0 15px #ff1493; z-index: 10; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div id="click-screen" onclick="startEffect()">❤️ Bấm vào đây để nhận quà từ anh nha... ❤️</div>
+    <canvas id="heartCanvas"></canvas>
+    <audio id="bgMusic" src="golden_hour.mp3" loop></audio>
+
+    <script>
+        const canvas = document.getElementById('heartCanvas');
+        const ctx = canvas.getContext('2d');
+        const WORDS = ["i love you", "love u", "my bae"];
+        const COLORS = ["#ffc0cb", "#ff69b4", "#ff1493", "#db7093", "#ffb6c1"];
+        
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+        let scale = Math.min(width / 110, height / 65); 
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            scale = Math.min(width / 110, height / 65);
+        });
+
+        class Particle {
+            constructor(x, y, order, kind) {
+                this.x = x; this.y = y; this.order = order; this.kind = kind;
+                this.word = WORDS[Math.floor(Math.random() * WORDS.length)];
+                this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+                this.alpha = 0; this.flicker = Math.random() * Math.PI * 2;
+                this.delay = 0; this.sizeMult = 0.8 + Math.random() * 0.4;
+            }
+        }
+
+        function heartXY(t) {
+            let x = 16 * Math.pow(Math.sin(t), 3);
+            let y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+            return { x: x, y: -y };
+        }
+
+        function toScreen(x, y) {
+            return { x: x * scale + width / 2, y: y * scale + height / 2 - 20 };
+        }
+
+        function buildOutlineParticles(n) {
+            let pts = [], placed = [];
+            for (let i = 0; i < n; i++) {
+                let t = (i / n) * 2 * Math.PI;
+                let p = heartXY(t); let s = toScreen(p.x, p.y);
+                if (placed.some(q => Math.hypot(s.x - q.x, s.y - q.y) < 13)) continue;
+                placed.push(s); pts.push(new Particle(s.x, s.y, i, "outline"));
+            }
+            return pts;
+        }
+
+        function buildFillParticles(n) {
+            let pts = [], placed = []; let attempts = 0;
+            while (pts.length < n && attempts < n * 80) {
+                attempts++;
+                let t = Math.random() * 2 * Math.PI; let r = Math.random() * 0.85;
+                let base = heartXY(t); let s = toScreen(base.x * r, base.y * r);
+                if (placed.some(q => Math.hypot(s.x - q.x, s.y - q.y) < 18)) continue;
+                placed.push(s); pts.push(new Particle(s.x, s.y, Math.floor(Math.random() * 200), "fill"));
+            }
+            return pts;
+        }
+
+        let outline = buildOutlineParticles(250);
+        let fill = buildFillParticles(180);
+        let maxOutlineOrder = Math.max(...outline.map(p => p.order), 0);
+        let fillStartFrame = Math.floor(maxOutlineOrder * 1.2) + 30;
+
+        outline.forEach(p => p.delay = Math.floor(p.order * 1.2));
+        fill.forEach(p => p.delay = fillStartFrame + p.order);
+        let particles = [...outline, ...fill];
+
+        let frame = 0; let isRunning = false;
+
+        function startEffect() {
+            document.getElementById('click-screen').style.display = 'none';
+            document.getElementById('bgMusic').play().catch(() => {});
+            isRunning = true; loop();
+        }
+
+        function loop() {
+            if (!isRunning) return;
+            ctx.fillStyle = '#000000'; ctx.fillRect(0, 0, width, height);
+            frame++;
+
+            particles.forEach(p => {
+                if (frame > p.delay && p.alpha < 255) {
+                    p.alpha = Math.min(255, p.alpha + 15 + Math.floor(Math.random() * 5));
+                }
+                if (p.alpha <= 0) return;
+
+                let flick = p.alpha >= 255 ? 0.75 + 0.25 * Math.sin(frame * 0.04 + p.flicker) : 1.0;
+                let currentAlpha = (p.alpha / 255) * flick;
+
+                ctx.save();
+                ctx.globalAlpha = currentAlpha;
+                ctx.fillStyle = p.color;
+                ctx.font = `bold ${Math.floor((p.kind === "outline" ? 13 : 10) * p.sizeMult * (scale/8))}px Arial`;
+                ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+
+                if (currentAlpha > 0.1) {
+                    ctx.shadowColor = p.color; ctx.shadowBlur = 10;
+                }
+                ctx.fillText(p.word, p.x, p.y);
+                ctx.restore();
+            });
+
+            let centerStart = fillStartFrame + 120;
+            if (frame > centerStart) {
+                let progress = Math.min(1.0, (frame - centerStart) / 60);
+                let centerAlpha = 1 - Math.exp(-progress * 8);
+                let pulse = 1.0 + 0.025 * Math.sin(frame * 0.05);
+
+                ctx.save();
+                ctx.globalAlpha = centerAlpha;
+                ctx.fillStyle = "#e072b1";
+                let centerFontSize = Math.floor(28 * pulse * (scale/8));
+                ctx.font = `bold ${centerFontSize}px Georgia`;
+                ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+                ctx.shadowColor = "#e072b1"; ctx.shadowBlur = 20;
+                ctx.fillText("You Are The Only One", width / 2, height / 2);
+                ctx.restore();
+            }
+            requestAnimationFrame(loop);
+        }
+    </script>
+</body>
+</html>
