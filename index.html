@@ -86,7 +86,7 @@
     </div>
 
     <script>
-        const WORDS = ["i love you", "love u", "my bae"];
+        const WORDS = ["i love you", "miss u so much", "yeu Van Anh"];
         const COLORS = ["#ffc0cb", "#ff69b4", "#ff1493", "#db7093", "#ffb6c1"];
         const SCALE = 19; 
 
@@ -107,7 +107,6 @@
             constructor(x, y, delay, kind) {
                 this.targetX = x;
                 this.targetY = y;
-                // Bay mượt mà từ lõi trung tâm ra
                 this.x = canvas.width / 2 + (Math.random() - 0.5) * 30;
                 this.y = canvas.height / 2 - 40 + (Math.random() - 0.5) * 30;
                 this.kind = kind;
@@ -120,9 +119,13 @@
 
             update(frame) {
                 if (frame > this.delay) {
-                    if (this.alpha < 255) this.alpha += 1.5; 
-                    this.x += (this.targetX - this.x) * 0.05; 
-                    this.y += (this.targetY - this.y) * 0.05;
+                    // Đã chỉnh lại tốc độ hiện chữ lên nhanh hơn cho phần ruột (alpha tăng từ 1.5 lên 3.0)
+                    if (this.alpha < 255) this.alpha += (this.kind === "fill" ? 3.0 : 1.5); 
+                    
+                    // Đã tăng tốc độ lướt chữ (từ 0.05 lên 0.08) để hạt chữ trong ruột bay vào nhanh hơn
+                    let speed = this.kind === "fill" ? 0.08 : 0.05;
+                    this.x += (this.targetX - this.x) * speed; 
+                    this.y += (this.targetY - this.y) * speed;
                 }
 
                 let flick = 1.0;
@@ -151,7 +154,6 @@
             }
         }
 
-        // Đã đồng bộ chuẩn hóa góc toán học giống hệt gốc Pygame
         function heartXY(t) {
             let x = 16 * Math.pow(Math.sin(t), 3);
             let y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
@@ -165,10 +167,9 @@
             };
         }
 
-        /* KHÔI PHỤC 100% THUẬT TOÁN VẼ TUẦN TỰ PYGAME GỐC + TĂNG 1000 HẠT ĐẶC KHÍT */
         function buildHeart() {
-            const n_outline = 200; // Tăng số chữ ở viền cho mượt
-            const frames_per_step = 4.5; // Tốc độ trễ vẽ từng hạt viền (Đã chỉnh chậm rãi)
+            const n_outline = 200; 
+            const frames_per_step = 4.5; // GIỮ NGUYÊN: Viền vẽ tuần tự chậm rãi từng hạt cực đẹp
 
             // 1. Viền vẽ tuần tự đều tăm tắp từ khe trên vòng qua phải xuống dưới rồi lên trái y hệt Pygame
             for (let i = 0; i < n_outline; i++) {
@@ -180,17 +181,16 @@
                 particles.push(new Particle(screenPos.x, screenPos.y, calculatedDelay, "outline"));
             }
 
-            const fill_start_frame = n_outline * frames_per_step + 40; // Thời điểm ruột bắt đầu hiện sau khi viền đi được 1 vòng
+            const fill_start_frame = n_outline * frames_per_step + 40; 
             
-            // 2. Ruột trái tim lấp khít toàn diện với 800 hạt chữ (Tổng cộng cả viền và ruột là 1000 chữ)
+            // 2. Ruột trái tim: ĐÃ TĂNG TỐC ĐỘ XUẤT HIỆN (Thay đổi từ 2800 thành 1000 để lấp đầy nhanh chóng hơn)
             for (let i = 0; i < 800; i++) { 
                 let t = Math.random() * 2 * Math.PI;
                 let r = Math.sqrt(Math.random()) * 0.96; 
                 let pos = heartXY(t);
                 let screenPos = toScreen(pos.x * r, pos.y * r);
                 
-                // Thuật toán Pygame gốc: ngẫu nhiên số frame trễ gối đầu tiếp sau fill_start_frame để từ từ đặc khít
-                let randomDelay = fill_start_frame + Math.random() * 2800; 
+                let randomDelay = fill_start_frame + Math.random() * 1000; 
                 particles.push(new Particle(screenPos.x, screenPos.y, randomDelay, "fill"));
             }
         }
