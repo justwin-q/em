@@ -5,16 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Heart For You</title>
     <style>
-        /* 1. GIỮ NGUYÊN 100% PHẦN TRANG TRÍ NỀN HỒNG, CĂN GIỮA, KHÓA CUỘN */
+        /* 1. GIỮ NGUYÊN 100% TRANG TRÍ NỀN HỒNG, CĂN GIỮA, KHÓA CUỘN */
         body {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #ffe6e6; /* Nền hồng lãng mạn */
+            background-color: #ffe6e6; 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden; /* Khóa cuộn trang */
+            overflow: hidden; 
             margin: 0;
         }
 
@@ -40,7 +40,6 @@
             z-index: 10;
         }
 
-        /* Khi bấm vào nút, nó bự lên và phát sáng trước khi biến mất */
         .heart-btn.grow {
             transform: scale(2.2);
             filter: drop-shadow(0 0 25px rgba(255, 77, 77, 0.9));
@@ -56,7 +55,7 @@
             z-index: 10;
         }
 
-        /* Canvas hiển thị mượt mà */
+        /* Canvas vẽ hiệu ứng trái tim chữ */
         canvas {
             position: absolute;
             top: 0;
@@ -75,21 +74,21 @@
 <body>
 
     <div class="container">
-        <!-- ĐẢM BẢO GIỮ LẠI NHẠC NỀN -->
+        <!-- FILE NHẠC NỀN -->
         <audio id="bgMusic" src="golden_hour.mp3" loop></audio>
 
         <!-- Bước 1: Trái tim nút bấm ban đầu -->
         <div class="heart-btn" id="heartBtn" onclick="startLoveAnimation()">❤️</div>
         <div class="hint-text" id="hint">Click here to take my heart</div>
         
-        <!-- Bước 2: Canvas vẽ hiệu ứng trái tim chữ -->
+        <!-- Bước 2: Nơi các chữ nhỏ xuất hiện lấp đầy trái tim -->
         <canvas id="heartCanvas"></canvas>
     </div>
 
     <script>
         const WORDS = ["i love you", "love u", "my bae"];
         const COLORS = ["#ffc0cb", "#ff69b4", "#ff1493", "#db7093", "#ffb6c1"];
-        const SCALE = 13; 
+        const SCALE = 14; 
 
         const canvas = document.getElementById('heartCanvas');
         const ctx = canvas.getContext('2d');
@@ -105,33 +104,29 @@
         resizeCanvas();
 
         class Particle {
-            constructor(x, y, order, kind) {
+            constructor(x, y, delay, kind) {
                 this.targetX = x;
                 this.targetY = y;
-                // Hiệu ứng chữ từ ngoài rìa lướt từ từ vào trong để lấp đầy
-                this.x = x + (Math.random() - 0.5) * 300; 
-                this.y = y + (Math.random() - 0.5) * 300;
-                this.order = order;
+                this.x = canvas.width / 2 + (Math.random() - 0.5) * 30;
+                this.y = canvas.height / 2 - 20 + (Math.random() - 0.5) * 30;
                 this.kind = kind;
                 this.word = WORDS[Math.floor(Math.random() * WORDS.length)];
                 this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
                 this.alpha = 0;
                 this.flicker = Math.random() * Math.PI * 2;
-                // Điều chỉnh tốc độ xuất hiện từ từ của ruột trái tim
-                this.delay = kind === "outline" ? order * 2 : 120 + Math.random() * 400;
+                this.delay = delay;
             }
 
             update(frame) {
                 if (frame > this.delay) {
-                    if (this.alpha < 255) this.alpha += 4; // Tăng alpha từ từ để chữ hiện lên mượt
-                    // Lướt nhẹ nhàng về vị trí chuẩn
-                    this.x += (this.targetX - this.x) * 0.04;
-                    this.y += (this.targetY - this.y) * 0.04;
+                    if (this.alpha < 255) this.alpha += 2; // Giảm từ 4 xuống 2 giúp chữ hiện lên từ từ hơn
+                    this.x += (this.targetX - this.x) * 0.08;
+                    this.y += (this.targetY - this.y) * 0.08;
                 }
 
                 let flick = 1.0;
                 if (this.alpha >= 255) {
-                    flick = 0.75 + 0.25 * Math.sin(frame * 0.04 + this.flicker);
+                    flick = 0.8 + 0.2 * Math.sin(frame * 0.04 + this.flicker);
                 }
                 return Math.min(255, this.alpha * flick) / 255;
             }
@@ -147,7 +142,7 @@
                 ctx.textAlign = "center";
                 ctx.textBaseline = "middle";
 
-                ctx.shadowBlur = 10;
+                ctx.shadowBlur = 8;
                 ctx.shadowColor = this.color;
 
                 ctx.fillText(this.word, this.x, this.y);
@@ -168,34 +163,27 @@
             };
         }
 
+        /* ĐÃ ĐƯỢC CHỈNH TỐC ĐỘ CHẠY SIÊU CHẬM */
         function buildHeart() {
-            // Tạo viền (outline) trước
+            let delayCounter = 0;
+
+            // 1. Vẽ viền trái tim chạy chậm rải rác từng chữ nối đuôi nhau
             for (let i = 0; i < 160; i++) {
                 let t = (i / 160) * 2 * Math.PI;
                 let pos = heartXY(t);
                 let screenPos = toScreen(pos.x, pos.y);
-                particles.push(new Particle(screenPos.x, screenPos.y, i, "outline"));
+                particles.push(new Particle(screenPos.x, screenPos.y, delayCounter, "outline"));
+                delayCounter += 4.5; // Đã tăng thời gian chờ giúp viền vẽ chậm rãi
             }
-            // Lập đầy ruột trái tim bằng một lượng chữ lớn và dày dặn hơn (250 hạt)
-            for (let i = 0; i < 250; i++) {
-                let t = Math.random() * 2 * Math.PI;
-                let r = Math.pow(Math.random(), 0.7); // Phân bổ chữ đều đặn khắp ruột trái tim
-                let pos = heartXY(t);
-                let screenPos = toScreen(pos.x * r, pos.y * r);
-                particles.push(new Particle(screenPos.x, screenPos.y, i, "fill"));
-            }
-        }
 
-        // Tạo thêm hạt liên tục theo thời gian để hiệu ứng lắp đầy không bao giờ ngừng
-        function addMoreFillParticles() {
-            if (particles.length < 600) { // Giới hạn tối đa để tránh bị giật lag trang web
+            // 2. Ruột trái tim từ từ lấp đầy rải rác lâu hơn nhiều
+            for (let i = 0; i < 200; i++) { 
                 let t = Math.random() * 2 * Math.PI;
-                let r = Math.pow(Math.random(), 0.7);
+                let r = Math.random() * 0.85;
                 let pos = heartXY(t);
                 let screenPos = toScreen(pos.x * r, pos.y * r);
-                let newParticle = new Particle(screenPos.x, screenPos.y, 0, "fill");
-                newParticle.delay = currentFrame + Math.random() * 20; // Hiện ngay sau khi tạo
-                particles.push(newParticle);
+                let randomDelay = delayCounter + Math.random() * 900; // Đã kéo dài khoảng ngẫu nhiên để ruột lấp đầy thong thả
+                particles.push(new Particle(screenPos.x, screenPos.y, randomDelay, "fill"));
             }
         }
 
@@ -203,24 +191,15 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             currentFrame++;
 
-            // Mỗi 5 khung hình sẽ sinh thêm chữ nhỏ bay vào lấp đầy ruột trái tim
-            if (currentFrame > 200 && currentFrame % 5 === 0) {
-                addMoreFillParticles();
-            }
-
             particles.forEach(p => p.draw(currentFrame));
 
             animationFrameId = requestAnimationFrame(loop);
         }
 
         function startLoveAnimation() {
-            // Phát nhạc nền ngay khi bấm click
             const music = document.getElementById('bgMusic');
-            music.play().catch(error => {
-                console.log("Lỗi trình duyệt chặn phát nhạc:", error);
-            });
+            music.play().catch(e => console.log("Music play blocked:", e));
 
-            // Hiệu ứng click trái tim to lên rồi ẩn đi
             document.getElementById('heartBtn').classList.add('grow');
             document.getElementById('hint').style.opacity = '0';
 
