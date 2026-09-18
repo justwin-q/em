@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Heart For You</title>
     <style>
-        /* 1. GIỮ NGUYÊN 100% TRANG TRÍ NỀN HỒNG, CĂN GIỮA, KHÓA CUỘN */
+        /* GIỮ NGUYÊN 100% TRANG TRÍ NỀN HỒNG, CĂN GIỮA, KHÓA CUỘN */
         body {
             display: flex;
             flex-direction: column;
@@ -29,7 +29,7 @@
             align-items: center;
         }
 
-        /* 2. GIỮ NGUYÊN HIỆU ỨNG NÚT BẤM TRÁI TIM BAN ĐẦU */
+        /* GIỮ NGUYÊN HIỆU ỨNG NÚT BẤM TRÁI TIM BAN ĐẦU */
         .heart-btn {
             font-size: 80px;
             cursor: pointer;
@@ -119,7 +119,7 @@
 
             update(frame) {
                 if (frame > this.delay) {
-                    if (this.alpha < 255) this.alpha += 2; // Giảm từ 4 xuống 2 giúp chữ hiện lên từ từ hơn
+                    if (this.alpha < 255) this.alpha += 2; 
                     this.x += (this.targetX - this.x) * 0.08;
                     this.y += (this.targetY - this.y) * 0.08;
                 }
@@ -163,26 +163,31 @@
             };
         }
 
-        /* ĐÃ ĐƯỢC CHỈNH TỐC ĐỘ CHẠY SIÊU CHẬM */
+        /* ĐÃ ĐIỀU CHỈNH ĐỂ TRẢI ĐỀU CHỮ SANG 2 BÊN, KHÔNG BỊ LÕM */
         function buildHeart() {
             let delayCounter = 0;
 
-            // 1. Vẽ viền trái tim chạy chậm rải rác từng chữ nối đuôi nhau
-            for (let i = 0; i < 160; i++) {
-                let t = (i / 160) * 2 * Math.PI;
+            // 1. Vẽ viền trái tim khít và sắc nét (180 chữ)
+            for (let i = 0; i < 180; i++) {
+                let t = (i / 180) * 2 * Math.PI;
                 let pos = heartXY(t);
                 let screenPos = toScreen(pos.x, pos.y);
                 particles.push(new Particle(screenPos.x, screenPos.y, delayCounter, "outline"));
-                delayCounter += 4.5; // Đã tăng thời gian chờ giúp viền vẽ chậm rãi
+                delayCounter += 4.0; 
             }
 
-            // 2. Ruột trái tim từ từ lấp đầy rải rác lâu hơn nhiều
-            for (let i = 0; i < 200; i++) { 
+            // 2. Thuật toán phân bổ ruột mới: Ép chữ rải đều ra hai bên sườn, giảm bớt dồn ứ ở giữa tâm
+            for (let i = 0; i < 500; i++) { 
                 let t = Math.random() * 2 * Math.PI;
-                let r = Math.random() * 0.85;
+                
+                // Thay đổi cách tính bán kính: Tăng tỷ lệ xuất hiện của chữ ở vùng rìa ngoài (0.4 đến 0.95)
+                // Điều này giúp đẩy các từ nhỏ sang 2 bên tai trái tim nhiều hơn
+                let r = 0.35 + Math.pow(Math.random(), 0.7) * 0.58; 
+                
                 let pos = heartXY(t);
                 let screenPos = toScreen(pos.x * r, pos.y * r);
-                let randomDelay = delayCounter + Math.random() * 900; // Đã kéo dài khoảng ngẫu nhiên để ruột lấp đầy thong thả
+                
+                let randomDelay = delayCounter + Math.random() * 1200; 
                 particles.push(new Particle(screenPos.x, screenPos.y, randomDelay, "fill"));
             }
         }
