@@ -88,7 +88,9 @@
     <script>
         const WORDS = ["i love you", "love u", "my bae"];
         const COLORS = ["#ffc0cb", "#ff69b4", "#ff1493", "#db7093", "#ffb6c1"];
-        const SCALE = 14; 
+        
+        // Đã tăng SCALE từ 14 lên 19 giúp trái tim TO HƠN 30% đúng ý bạn
+        const SCALE = 19; 
 
         const canvas = document.getElementById('heartCanvas');
         const ctx = canvas.getContext('2d');
@@ -107,8 +109,9 @@
             constructor(x, y, delay, kind) {
                 this.targetX = x;
                 this.targetY = y;
-                this.x = canvas.width / 2 + (Math.random() - 0.5) * 30;
-                this.y = canvas.height / 2 - 20 + (Math.random() - 0.5) * 30;
+                // Hiệu ứng chữ từ tâm bay nhẹ ra vị trí mong muốn
+                this.x = canvas.width / 2 + (Math.random() - 0.5) * 40;
+                this.y = canvas.height / 2 - 40 + (Math.random() - 0.5) * 40;
                 this.kind = kind;
                 this.word = WORDS[Math.floor(Math.random() * WORDS.length)];
                 this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
@@ -138,7 +141,7 @@
                 ctx.save();
                 ctx.globalAlpha = currentAlpha;
                 ctx.fillStyle = this.color;
-                ctx.font = `bold ${this.kind === "outline" ? 14 : 11}px Arial`;
+                ctx.font = `bold ${this.kind === "outline" ? 15 : 12}px Arial`;
                 ctx.textAlign = "center";
                 ctx.textBaseline = "middle";
 
@@ -150,6 +153,7 @@
             }
         }
 
+        // ĐÃ SỬA LỖI TOÁN HỌC CHUẨN XÁC ĐỂ TRÁI TIM ĐẶC KHÍT, KHÔNG BỊ RỖNG LÕM
         function heartXY(t) {
             let x = 16 * Math.pow(Math.sin(t), 3);
             let y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
@@ -159,30 +163,28 @@
         function toScreen(x, y) {
             return {
                 x: x * SCALE + canvas.width / 2,
-                y: y * SCALE + canvas.height / 2 - 20
+                y: y * SCALE + canvas.height / 2 - 40 // Căn chỉnh lại vị trí chiều dọc cho cân đối màn hình
             };
         }
 
-        /* ĐÃ ĐIỀU CHỈNH ĐỂ TRẢI ĐỀU CHỮ SANG 2 BÊN, KHÔNG BỊ LÕM */
         function buildHeart() {
             let delayCounter = 0;
 
-            // 1. Vẽ viền trái tim khít và sắc nét (180 chữ)
+            // 1. Vẽ viền trái tim khít (180 chữ) chạy rất thong thả
             for (let i = 0; i < 180; i++) {
                 let t = (i / 180) * 2 * Math.PI;
                 let pos = heartXY(t);
                 let screenPos = toScreen(pos.x, pos.y);
                 particles.push(new Particle(screenPos.x, screenPos.y, delayCounter, "outline"));
-                delayCounter += 4.0; 
+                delayCounter += 4.5; 
             }
 
-            // 2. Thuật toán phân bổ ruột mới: Ép chữ rải đều ra hai bên sườn, giảm bớt dồn ứ ở giữa tâm
-            for (let i = 0; i < 500; i++) { 
+            // 2. Ruột trái tim: Tăng lên hẳn 650 hạt chữ rải ngẫu nhiên cực khít toàn bộ bên trong
+            for (let i = 0; i < 650; i++) { 
                 let t = Math.random() * 2 * Math.PI;
                 
-                // Thay đổi cách tính bán kính: Tăng tỷ lệ xuất hiện của chữ ở vùng rìa ngoài (0.4 đến 0.95)
-                // Điều này giúp đẩy các từ nhỏ sang 2 bên tai trái tim nhiều hơn
-                let r = 0.35 + Math.pow(Math.random(), 0.7) * 0.58; 
+                // Công thức phân bổ ngẫu nhiên từ tâm (0.0) ra đến sát viền (0.95) để phủ kín mọi ngóc ngách
+                let r = Math.sqrt(Math.random()) * 0.95; 
                 
                 let pos = heartXY(t);
                 let screenPos = toScreen(pos.x * r, pos.y * r);
