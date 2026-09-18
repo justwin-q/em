@@ -119,8 +119,8 @@
 
             update(frame) {
                 if (frame > this.delay) {
-                    if (this.alpha < 255) this.alpha += 1.5; // Giảm nhẹ tốc độ hiện chữ lên (từ 2 xuống 1.5) để mượt hơn
-                    this.x += (this.targetX - this.x) * 0.05; // Giảm tốc độ lướt chữ (từ 0.08 xuống 0.05) giúp bay chậm hơn
+                    if (this.alpha < 255) this.alpha += 1.5; 
+                    this.x += (this.targetX - this.x) * 0.05; 
                     this.y += (this.targetY - this.y) * 0.05;
                 }
 
@@ -163,19 +163,21 @@
             };
         }
 
-        /* ĐÃ ĐIỀU CHỈNH KÉO DÀI THỜI GIAN ĐỂ KHỚP VỚI NHẠC NỀN */
+        /* THUẬT TOÁN MỚI: VẼ TỪ GIỮA SANG HAI BÊN VÀ TĂNG CHỮ LẤP ĐẦY KHÍT KHÔNG KHE HỞ */
         function buildHeart() {
             let maxOutlineDelay = 0;
-            const n_outline = 180;
+            const n_outline = 200; // Tăng viền lên 200 chữ cho khít hơn nữa
 
-            // 1. Viền đối xứng từ trên xuống và từ dưới lên (Kéo dài độ trễ lên gấp đôi để chạy cực kỳ chậm)
+            // 1. Vẽ viền: Bắt đầu từ trục giữa (đỉnh & đáy) rồi bò lan sang hai bên đối xứng rất đẹp
             for (let i = 0; i < n_outline; i++) {
                 let t = (i / n_outline) * 2 * Math.PI;
                 let pos = heartXY(t);
                 let screenPos = toScreen(pos.x, pos.y);
                 
-                let orderFactor = Math.abs(Math.sin(t));
-                let calculatedDelay = orderFactor * 480; // Tăng hệ số trễ từ 240 lên 480 để kéo dài thời gian vẽ viền
+                // Công thức tính khoảng cách góc đến trục giữa (t = PI/2 và t = 3*PI/2)
+                // Giúp chữ xuất hiện từ đỉnh giữa tràn sang hai bên eo và từ đáy giữa đi lên
+                let distToCenterAxis = Math.abs(Math.cos(t)); 
+                let calculatedDelay = (1 - distToCenterAxis) * 600; // 600 frame giúp hai nhánh bò cực kỳ chậm rãi
                 
                 if (calculatedDelay > maxOutlineDelay) {
                     maxOutlineDelay = calculatedDelay;
@@ -184,15 +186,16 @@
                 particles.push(new Particle(screenPos.x, screenPos.y, calculatedDelay, "outline"));
             }
 
-            // 2. Ruột lấp đầy khít khao rải rác từ tốn (Kéo dài thời gian ngẫu nhiên lên 2400 frame)
-            for (let i = 0; i < 650; i++) { 
+            // 2. Ruột trái tim: TĂNG LÊN HẲN 900 CHỮ siêu khổng lồ để lấp đặc hoàn toàn, không còn khoảng trống
+            for (let i = 0; i < 900; i++) { 
                 let t = Math.random() * 2 * Math.PI;
-                let r = Math.sqrt(Math.random()) * 0.95; 
+                // Phân bổ chữ đều từ lõi ra rìa, tăng mật độ ở những phần sườn eo
+                let r = Math.sqrt(Math.random()) * 0.96; 
                 let pos = heartXY(t);
                 let screenPos = toScreen(pos.x * r, pos.y * r);
                 
-                // Ruột sẽ từ từ lấp đầy rải rác trải dài ra tầm 30-40 giây tiếp theo để tha hồ khớp nhạc
-                let randomDelay = (maxOutlineDelay * 0.6) + Math.random() * 2400; 
+                // Các chữ trong ruột xuất hiện rải rác lững lờ đan xen sau đó để khớp nhạc kéo dài
+                let randomDelay = (maxOutlineDelay * 0.4) + Math.random() * 2800; 
                 particles.push(new Particle(screenPos.x, screenPos.y, randomDelay, "fill"));
             }
         }
