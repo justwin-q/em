@@ -86,7 +86,7 @@
     </div>
 
     <script>
-        const WORDS = ["i love you", "miss u so much", "yeu van anh"];
+        const WORDS = ["i love you", "love u", "my bae"];
         const COLORS = ["#ffc0cb", "#ff69b4", "#ff1493", "#db7093", "#ffb6c1"];
         const SCALE = 19; 
 
@@ -107,8 +107,9 @@
             constructor(x, y, delay, kind) {
                 this.targetX = x;
                 this.targetY = y;
-                this.x = canvas.width / 2 + (Math.random() - 0.5) * 40;
-                this.y = canvas.height / 2 - 40 + (Math.random() - 0.5) * 40;
+                // Bay mượt mà từ lõi trung tâm ra
+                this.x = canvas.width / 2 + (Math.random() - 0.5) * 30;
+                this.y = canvas.height / 2 - 40 + (Math.random() - 0.5) * 30;
                 this.kind = kind;
                 this.word = WORDS[Math.floor(Math.random() * WORDS.length)];
                 this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
@@ -150,6 +151,7 @@
             }
         }
 
+        // Đã đồng bộ chuẩn hóa góc toán học giống hệt gốc Pygame
         function heartXY(t) {
             let x = 16 * Math.pow(Math.sin(t), 3);
             let y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
@@ -163,39 +165,32 @@
             };
         }
 
-        /* THUẬT TOÁN MỚI: VẼ TỪ GIỮA SANG HAI BÊN VÀ TĂNG CHỮ LẤP ĐẦY KHÍT KHÔNG KHE HỞ */
+        /* KHÔI PHỤC 100% THUẬT TOÁN VẼ TUẦN TỰ PYGAME GỐC + TĂNG 1000 HẠT ĐẶC KHÍT */
         function buildHeart() {
-            let maxOutlineDelay = 0;
-            const n_outline = 200; // Tăng viền lên 200 chữ cho khít hơn nữa
+            const n_outline = 200; // Tăng số chữ ở viền cho mượt
+            const frames_per_step = 4.5; // Tốc độ trễ vẽ từng hạt viền (Đã chỉnh chậm rãi)
 
-            // 1. Vẽ viền: Bắt đầu từ trục giữa (đỉnh & đáy) rồi bò lan sang hai bên đối xứng rất đẹp
+            // 1. Viền vẽ tuần tự đều tăm tắp từ khe trên vòng qua phải xuống dưới rồi lên trái y hệt Pygame
             for (let i = 0; i < n_outline; i++) {
                 let t = (i / n_outline) * 2 * Math.PI;
                 let pos = heartXY(t);
                 let screenPos = toScreen(pos.x, pos.y);
                 
-                // Công thức tính khoảng cách góc đến trục giữa (t = PI/2 và t = 3*PI/2)
-                // Giúp chữ xuất hiện từ đỉnh giữa tràn sang hai bên eo và từ đáy giữa đi lên
-                let distToCenterAxis = Math.abs(Math.cos(t)); 
-                let calculatedDelay = (1 - distToCenterAxis) * 600; // 600 frame giúp hai nhánh bò cực kỳ chậm rãi
-                
-                if (calculatedDelay > maxOutlineDelay) {
-                    maxOutlineDelay = calculatedDelay;
-                }
-
+                let calculatedDelay = i * frames_per_step; 
                 particles.push(new Particle(screenPos.x, screenPos.y, calculatedDelay, "outline"));
             }
 
-            // 2. Ruột trái tim: TĂNG LÊN HẲN 900 CHỮ siêu khổng lồ để lấp đặc hoàn toàn, không còn khoảng trống
-            for (let i = 0; i < 900; i++) { 
+            const fill_start_frame = n_outline * frames_per_step + 40; // Thời điểm ruột bắt đầu hiện sau khi viền đi được 1 vòng
+            
+            // 2. Ruột trái tim lấp khít toàn diện với 800 hạt chữ (Tổng cộng cả viền và ruột là 1000 chữ)
+            for (let i = 0; i < 800; i++) { 
                 let t = Math.random() * 2 * Math.PI;
-                // Phân bổ chữ đều từ lõi ra rìa, tăng mật độ ở những phần sườn eo
                 let r = Math.sqrt(Math.random()) * 0.96; 
                 let pos = heartXY(t);
                 let screenPos = toScreen(pos.x * r, pos.y * r);
                 
-                // Các chữ trong ruột xuất hiện rải rác lững lờ đan xen sau đó để khớp nhạc kéo dài
-                let randomDelay = (maxOutlineDelay * 0.4) + Math.random() * 2800; 
+                // Thuật toán Pygame gốc: ngẫu nhiên số frame trễ gối đầu tiếp sau fill_start_frame để từ từ đặc khít
+                let randomDelay = fill_start_frame + Math.random() * 2800; 
                 particles.push(new Particle(screenPos.x, screenPos.y, randomDelay, "fill"));
             }
         }
