@@ -3,25 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chỉ mình em</title>
+    <title>Heart Particle Animation</title>
     <style>
-        body {
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        /* Giao diện màn hình click ban đầu */
+        .click-screen {
+            position: absolute;
+            z-index: 10;
+            text-align: center;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            background-color: #ffe6e6;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden;
-            margin: 0;
+            transition: opacity 1s ease, visibility 1s;
         }
 
-        .container {
-            text-align: center;
-        }
-
-    
         .heart {
             font-size: 80px;
             color: #ff4d4d;
@@ -29,67 +40,236 @@
             transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), filter 0.8s ease;
             user-select: none;
             display: inline-block;
-            padding: 20px; /
+            padding: 20px;
+            animation: pulse-slow 1.5s infinite ease-in-out;
         }
 
-
         .heart.grow {
-            transform: scale(2.2);
+            transform: scale(3.5);
             filter: drop-shadow(0 0 25px rgba(255, 77, 77, 0.9)) drop-shadow(0 0 10px rgba(255, 0, 0, 0.5));
+            animation: none;
         }
 
         .hint-text {
             font-size: 18px;
-            color: #555;
+            color: #ffb3b3;
             margin-top: 10px;
             transition: opacity 0.5s;
         }
 
-        .secret-message {
-            font-size: 26px;
-            font-weight: bold;
-            color: #cc0000;
-            margin-top: 50px;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 1s ease-in-out;
-         
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        /* Hiệu ứng đập nhẹ lúc chưa click */
+        @keyframes pulse-slow {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
 
-
-        .secret-message.show {
+        /* Canvas ẩn lúc đầu, hiện mượt sau khi click */
+        canvas {
+            background-color: #000;
+            display: block;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1.5s ease;
+        }
+        canvas.show {
             opacity: 1;
-            transform: translateY(0);
+            visibility: visible;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-     
-        <div class="heart" id="heartBtn" onclick="revealLove()">❤️</div>
-        
- 
-        <div class="hint-text" id="hint">Click here to take my heart</div>
-        
-   
-        <div class="secret-message" id="message">You are my only one</div>
+    <!-- Màn hình click để kích hoạt hiệu ứng bất ngờ -->
+    <div class="click-screen" id="clickScreen">
+        <div class="heart" id="heartBtn">❤️</div>
+        <div class="hint-text" id="hintText">Click here to take my heart</div>
     </div>
 
-    <script>
-        function revealLove() {
-           
-            document.getElementById('heartBtn').classList.add('grow');
-            
-            document.getElementById('hint').style.opacity = '0';
-            
-        
-            setTimeout(() => {
-                document.getElementById('message').classList.add('show');
-            }, 600); 
-        }
-    </script>
+    <!-- Canvas chứa hiệu ứng trái tim chữ của bạn -->
+    <canvas id="heartCanvas"></canvas>
 
+    <script>
+        const canvas = document.getElementById('heartCanvas');
+        const ctx = canvas.getContext('2d');
+        const heartBtn = document.getElementById('heartBtn');
+        const clickScreen = document.getElementById('clickScreen');
+        const hintText = document.getElementById('hintText');
+
+        // Định hình kích thước gốc giống như Pygame
+        const WIDTH = 2000;
+        const HEIGHT = 1200;
+        canvas.width = WIDTH;
+        canvas.height = HEIGHT;
+
+        // Tự động scale canvas vừa vặn với màn hình trình duyệt nhưng giữ nguyên tỷ lệ gốc
+        function resizeCanvas() {
+            const scaleX = window.innerWidth / WIDTH;
+            const scaleY = window.innerHeight / HEIGHT;
+            const scale = Math.min(scaleX, scaleY);
+            canvas.style.width = (WIDTH * scale) + 'px';
+            canvas.style.height = (HEIGHT * scale) + 'px';
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Khởi tạo các hằng số từ cấu hình Pygame gốc
+        const SCALE = 28;
+        const WORDS = ["i love you", "love u", "my bae"];
+        const CENTER_TEXT = "You Are The Only One ";
+        const COLORS = [
+            "rgba(255, 192, 203,",
+            "rgba(255, 105, 180,",
+            "rgba(255, 20, 147,",
+            "rgba(219, 112, 147,",
+            "rgba(255, 182, 193,"
+        ];
+
+        class Particle {
+            constructor(x, y, order, kind) {
+                this.x = x;
+                this.y = y;
+                this.order = order;
+                this.kind = kind;
+                this.word = WORDS[Math.floor(Math.random() * WORDS.length)];
+                this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+                this.baseAlpha = Math.random() * (1.0 - 0.6) + 0.6;
+                this.flicker = Math.random() * Math.PI * 2;
+                this.size_mult = Math.random() * (1.15 - 0.85) + 0.85;
+            }
+        }
+
+        function heart_xy(t) {
+            const x = 16 * Math.pow(Math.sin(t), 3);
+            const y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+            return { x: x, y: -y };
+        }
+
+        function to_screen(x, y) {
+            return {
+                x: x * SCALE + WIDTH / 2,
+                y: y * SCALE + HEIGHT / 2 - 40
+            };
+        }
+
+        function build_outline_particles(n_outline, min_gap = 30) {
+            const particles = [];
+            const placed = [];
+            for (let i = 0; i < n_outline; i++) {
+                const t = (i / n_outline) * 2 * Math.PI;
+                const b = heart_xy(t);
+                const s = to_screen(b.x, b.y);
+                
+                let too_close = false;
+                for (let j = 0; j < placed.length; j++) {
+                    if (Math.hypot(s.x - placed[j].x, s.y - placed[j].y) < min_gap) {
+                        too_close = true;
+                        break;
+                    }
+                }
+                if (too_close) continue;
+                
+                placed.push(s);
+                particles.push(new Particle(s.x, s.y, i, "outline"));
+            }
+            return particles;
+        }
+
+        function build_fill_particles(n_fill, min_gap = 46) {
+            const particles = [];
+            const placed = [];
+            let attempts = 0;
+            const max_attempts = n_fill * 80;
+
+            while (particles.length < n_fill && attempts < max_attempts) {
+                attempts++;
+                const t = Math.random() * 2 * Math.PI;
+                const r = Math.random() * 0.86;
+                const b = heart_xy(t);
+                const px = b.x * r;
+                const py = b.y * r;
+                const s = to_screen(px, py);
+
+                let too_close = false;
+                for (let j = 0; j < placed.length; j++) {
+                    if (Math.hypot(s.x - placed[j].x, s.y - placed[j].y) < min_gap) {
+                        too_close = true;
+                        break;
+                    }
+                }
+                if (too_close) continue;
+
+                placed.push(s);
+                particles.push(new Particle(s.x, s.y, particles.length, "fill"));
+            }
+            return particles;
+        }
+
+        const outline_particles = build_outline_particles(1200, 25);
+        const fill_particles = build_fill_particles(800, 40);
+        const all_particles = outline_particles.concat(fill_particles);
+
+        let frame_count = 0;
+        let isAnimated = false;
+
+        function animate() {
+            if (!isAnimated) return;
+
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(0, 0, WIDTH, HEIGHT);
+            
+            frame_count++;
+
+            const pulse_factor = 1.0 + 0.07 * Math.sin(frame_count * 0.08);
+            const cx = WIDTH / 2;
+            const cy = HEIGHT / 2 - 40;
+
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+
+            all_particles.forEach(p => {
+                p.flicker += 0.05;
+                let current_alpha = p.baseAlpha * (0.7 + 0.3 * Math.sin(p.flicker));
+                current_alpha = Math.max(0, Math.min(1, current_alpha));
+
+                const dx = p.x - cx;
+                const dy = p.y - cy;
+                const px = cx + dx * pulse_factor;
+                const py = cy + dy * pulse_factor;
+
+                const base_size = (p.kind === "outline") ? 18 : 13;
+                const font_size = Math.max(8, Math.floor(base_size * p.size_mult * (0.9 + 0.1 * pulse_factor)));
+
+                ctx.font = `bold ${font_size}px Arial`;
+                ctx.fillStyle = `${p.color}${current_alpha})`;
+                ctx.fillText(p.word, px, py);
+            });
+
+            const center_pulse = 1.0 + 0.03 * Math.sin(frame_count * 0.08);
+            const center_font_size = Math.floor(48 * center_pulse);
+            
+            ctx.font = `bold ${center_font_size}px Georgia`;
+            ctx.fillStyle = "rgb(255, 50, 100)";
+            ctx.fillText(CENTER_TEXT, cx, cy);
+
+            requestAnimationFrame(animate);
+        }
+
+        // Xử lý sự kiện click trái tim
+        heartBtn.addEventListener('click', () => {
+            heartBtn.classList.add('grow');
+            hintText.style.opacity = '0';
+            
+            setTimeout(() => {
+                clickScreen.style.opacity = '0';
+                clickScreen.style.visibility = 'hidden';
+                
+                // Kích hoạt canvas và bắt đầu chạy loop animation
+                canvas.classList.add('show');
+                isAnimated = true;
+                animate();
+            }, 800); // Đợi trái tim nhỏ phóng to xong rồi mới đổi màn hình
+        });
+    </script>
 </body>
 </html>
