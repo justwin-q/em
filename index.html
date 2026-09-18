@@ -102,11 +102,14 @@
 <body>
 
     <div class="container">
+        <!-- Thẻ Audio ẩn dùng để phát nhạc nền -->
+        <audio id="bgMusic" src="golden_hour.mp3" loop></audio>
+
         <!-- Bước 1: Trái tim nút bấm ban đầu -->
         <div class="heart-btn" id="heartBtn" onclick="startLoveAnimation()">❤️</div>
         <div class="hint-text" id="hint">Click here to take my heart</div>
         
-        <!-- Bước 2: Nơi vẽ hiệu ứng trái tim ghép từ chữ nhỏ (Pygame chuyển sang) -->
+        <!-- Bước 2: Nơi vẽ hiệu ứng trái tim ghép từ chữ nhỏ -->
         <canvas id="heartCanvas"></canvas>
 
         <!-- Bước 3: Dòng chữ bí mật xuất hiện muộn nhất -->
@@ -114,10 +117,9 @@
     </div>
 
     <script>
-        // Cấu hình mảng chữ và màu sắc giống hệt code Pygame của bạn
         const WORDS = ["i love you", "love u", "my bae"];
         const COLORS = ["#ffc0cb", "#ff69b4", "#ff1493", "#db7093", "#ffb6c1"];
-        const SCALE = 13; // Tỉ lệ co giãn của trái tim trên web
+        const SCALE = 13; 
 
         const canvas = document.getElementById('heartCanvas');
         const ctx = canvas.getContext('2d');
@@ -125,7 +127,6 @@
         let animationFrameId;
         let currentFrame = 0;
 
-        // Định cỡ canvas full màn hình
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -133,12 +134,11 @@
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        // Lớp hạt kỹ thuật số (tương đương class Particle trong Pygame)
         class Particle {
             constructor(x, y, order, kind) {
                 this.targetX = x;
                 this.targetY = y;
-                this.x = x + (Math.random() - 0.5) * 100; // Hơi lệch một chút tạo hiệu ứng bay vào
+                this.x = x + (Math.random() - 0.5) * 100; 
                 this.y = y + (Math.random() - 0.5) * 100;
                 this.order = order;
                 this.kind = kind;
@@ -153,7 +153,6 @@
             update(frame) {
                 if (frame > this.delay) {
                     if (this.alpha < 255) this.alpha += 5;
-                    // Lướt dần về vị trí chuẩn của trái tim
                     this.x += (this.targetX - this.x) * 0.1;
                     this.y += (this.targetY - this.y) * 0.1;
                 }
@@ -176,7 +175,6 @@
                 ctx.textAlign = "center";
                 ctx.textBaseline = "middle";
 
-                // Giả lập hiệu ứng đổ bóng phát sáng (Glow) giống Pygame
                 ctx.shadowBlur = 10;
                 ctx.shadowColor = this.color;
 
@@ -185,7 +183,6 @@
             }
         }
 
-        // Công thức toán học tạo hình trái tim giống Pygame
         function heartXY(t) {
             let x = 16 * Math.pow(Math.sin(t), 3);
             let y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
@@ -199,16 +196,13 @@
             };
         }
 
-        // Tạo danh sách các điểm chữ cho viền và ruột trái tim
         function buildHeart() {
-            // Tạo viền (outline)
             for (let i = 0; i < 150; i++) {
                 let t = (i / 150) * 2 * Math.PI;
                 let pos = heartXY(t);
                 let screenPos = toScreen(pos.x, pos.y);
                 particles.push(new Particle(screenPos.x, screenPos.y, i, "outline"));
             }
-            // Lấp đầy ruột (fill)
             for (let i = 0; i < 120; i++) {
                 let t = Math.random() * 2 * Math.PI;
                 let r = Math.random() * 0.85;
@@ -218,15 +212,13 @@
             }
         }
 
-        // Vòng lặp vẽ hiệu ứng liên tục (Tương tự `while running` trong Pygame)
         function loop() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             currentFrame++;
 
             particles.forEach(p => p.draw(currentFrame));
 
-            // CHỖ TỰ CHỈNH THỜI GIAN CHỮ XUẤT HIỆN:
-            // Tăng số 450 lên nếu bạn muốn chữ "You Are My Only One" xuất hiện trễ hơn nữa!
+            // CHỖ TỰ CHỈNH THỜI GIAN CHỮ XUẤT HIỆN (450 frame tương đương ~7.5 giây)
             if (currentFrame > 450) {
                 document.getElementById('message').classList.add('show');
             }
@@ -236,7 +228,13 @@
 
         // Hàm kích hoạt khi người dùng click vào trái tim ❤️ ban đầu
         function startLoveAnimation() {
-            // 1. Phóng to nút bấm cũ và ẩn đi
+            // ĐOẠN PHÁT NHẠC KHI CÓ HÀNH ĐỘNG CLICK CỦA NGƯỜI DÙNG
+            const music = document.getElementById('bgMusic');
+            music.play().catch(error => {
+                console.log("Không thể tự động phát nhạc do chính sách bảo mật trình duyệt:", error);
+            });
+
+            // Phóng to nút bấm cũ và ẩn đi
             document.getElementById('heartBtn').classList.add('grow');
             document.getElementById('hint').style.opacity = '0';
 
@@ -244,11 +242,10 @@
                 document.getElementById('heartBtn').style.display = 'none';
                 document.getElementById('hint').style.display = 'none';
                 
-                // 2. Kích hoạt Canvas hiển thị và bắt đầu vẽ trái tim chữ bay vào
                 canvas.classList.add('show');
                 buildHeart();
                 loop();
-            }, 600); // Đợi nút bấm cũ ẩn xong (0.6 giây) thì hiệu ứng mới bắt đầu
+            }, 600); 
         }
     </script>
 </body>
