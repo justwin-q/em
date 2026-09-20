@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gửi Công Chúa Của Anh! 💖</title>
+    <title>Happy Birthday My Love 💖</title>
     <style>
         * {
             box-sizing: border-box;
@@ -22,134 +22,150 @@
             position: relative;
         }
 
-        /* Khung chứa các trang */
+        /* Khung chứa hiệu ứng từng trang */
         .page {
             position: absolute;
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.88);
             padding: 40px 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(255, 75, 110, 0.2);
-            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(255, 75, 110, 0.25);
+            backdrop-filter: blur(12px);
             border: 2px solid #fff;
             text-align: center;
-            max-width: 450px;
+            max-width: 460px;
             width: 90%;
             z-index: 10;
-            transition: all 0.8s ease-in-out;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
             opacity: 0;
-            transform: scale(0.8) translateY(50px);
+            transform: scale(0.8) translateY(40px);
             pointer-events: none;
         }
 
-        /* Trang đang được hiển thị */
+        /* Hiển thị trang hiện hành */
         .page.active {
             opacity: 1;
             transform: scale(1) translateY(0);
             pointer-events: auto;
         }
 
-        /* Nút bấm dễ thương */
+        /* Nút bấm chuyển trang siêu dễ thương */
         .btn-next {
             background: linear-gradient(45deg, #ff4b6e, #ff758f);
             color: white;
             border: none;
-            padding: 12px 30px;
-            font-size: 1rem;
+            padding: 14px 35px;
+            font-size: 1.1rem;
             font-weight: bold;
-            border-radius: 25px;
+            border-radius: 30px;
             cursor: pointer;
             margin-top: 25px;
-            box-shadow: 0 5px 15px rgba(255, 75, 110, 0.4);
+            box-shadow: 0 6px 18px rgba(255, 75, 110, 0.35);
             transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .btn-next:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 8px 20px rgba(255, 75, 110, 0.6);
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 10px 25px rgba(255, 75, 110, 0.5);
         }
 
-        /* TRANG 1: BÁNH KEM */
+        /* TRANG 1: BÁNH KEM & CLICK HERE */
         .cake-container {
             position: relative;
-            width: 160px;
-            height: 160px;
-            margin: 20px auto;
+            width: 180px;
+            height: 180px;
+            margin: 25px auto;
         }
         .cake {
             position: absolute;
-            bottom: 10px;
+            bottom: 15px;
             left: 50%;
             transform: translateX(-50%);
-            width: 130px;
-            height: 80px;
+            width: 140px;
+            height: 85px;
             background: #f7aef8;
-            border-radius: 10px 10px 0 0;
-            box-shadow: inset 0 8px #f3c68f;
+            border-radius: 12px 12px 0 0;
+            box-shadow: inset 0 8px #f3c68f, 0 4px 10px rgba(0,0,0,0.05);
         }
-        .cake::before { content: ""; position: absolute; top: 25px; left: 0; width: 130px; height: 12px; background: #b388eb; }
-        .cake::after { content: ""; position: absolute; top: 48px; left: 0; width: 130px; height: 10px; background: #80ffdb; }
+        .cake::before { content: ""; position: absolute; top: 25px; left: 0; width: 140px; height: 12px; background: #b388eb; }
+        .cake::after { content: ""; position: absolute; top: 50px; left: 0; width: 140px; height: 10px; background: #80ffdb; }
         .candle {
             position: absolute;
-            bottom: 90px;
+            bottom: 100px;
             left: 50%;
             transform: translateX(-50%);
-            width: 10px;
-            height: 40px;
+            width: 12px;
+            height: 42px;
             background: linear-gradient(to right, #ff9999, #ffcccc);
             border-radius: 3px;
         }
         .flame {
             position: absolute;
-            top: -12px;
+            top: -14px;
             left: 50%;
             transform: translateX(-50%);
-            width: 10px;
-            height: 15px;
+            width: 12px;
+            height: 18px;
             background: #ffbe0b;
             border-radius: 50% 50% 20% 20%;
-            box-shadow: 0 0 10px #ffbe0b;
+            box-shadow: 0 0 12px #ffbe0b, 0 0 20px #fb5607;
             animation: flicker 0.6s infinite alternate;
         }
-        @keyframes flicker { 0% { transform: translateX(-50%) scale(1); } 100% { transform: translateX(-50%) scale(1.1); } }
+        @keyframes flicker { 0% { transform: translateX(-50%) scale(1); } 100% { transform: translateX(-50%) scale(1.15) rotate(3deg); } }
 
         /* TRANG 2: LỜI CHÚC TO YOU */
-        .wishes {
+        .wishes-box {
             font-size: 1.1rem;
             color: #4a4a4a;
-            line-height: 1.7;
+            line-height: 1.8;
             margin-top: 15px;
+            text-align: justify;
         }
-        .wishes h2 { color: #ff4b6e; margin-bottom: 15px; }
+        .wishes-box h2 { 
+            color: #ff4b6e; 
+            margin-bottom: 20px; 
+            text-align: center; 
+            font-size: 1.8rem;
+            font-family: 'Dancing Script', cursive, sans-serif;
+        }
 
-        /* TRANG 3: ẢNH KỶ NIỆM */
+        /* TRANG 3: KHUNG ẢNH KỶ NIỆM 2 ĐỨA */
         .photo-frame {
             width: 100%;
-            height: 250px;
-            border-radius: 15px;
-            border: 5px solid #fff;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            height: 280px;
+            border-radius: 18px;
+            border: 6px solid #fff;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
             overflow: hidden;
-            background: #eee;
-            margin-top: 15px;
+            background: #f0f0f0;
+            margin: 20px 0;
+            position: relative;
         }
         .photo-frame img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .photo-frame:hover img {
+            transform: scale(1.05);
         }
 
-        /* HIỆU ỨNG TIM BAY NỀN */
+        /* HIỆU ỨNG TIM BAY NỀN NỔI BẬT */
         .heart-particle {
             position: absolute;
             color: #ff4b6e;
             pointer-events: none;
-            animation: flyUp 4s linear forwards;
-            opacity: 0.6;
+            animation: flyUp 4.5s linear forwards;
+            opacity: 0.65;
             z-index: 1;
         }
         @keyframes flyUp {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+            0% { transform: translateY(105vh) scale(0.5) rotate(0deg); opacity: 1; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) scale(1.2) rotate(360deg); opacity: 0; }
         }
     </style>
 </head>
@@ -157,61 +173,92 @@
 
     <!-- ================= TRANG 1 ================= -->
     <div class="page active" id="page1">
-        <h1 style="color: #ff4b6e; font-size: 1.8rem;">Happy Birthday, My Love! 🎂</h1>
+        <h1 style="color: #ff4b6e; font-size: 1.8rem; margin-bottom: 10px;">Happy Birthday! 🎉</h1>
+        <p style="color: #888; font-size: 0.95rem;">Anh có một bí mật nhỏ muốn bật mí...</p>
+        
         <div class="cake-container">
             <div class="candle"><div class="flame"></div></div>
             <div class="cake"></div>
         </div>
-        <p style="color: #666;">Anh có một món quà nhỏ dành cho em...</p>
-        <button class="btn-next" onclick="nextPage(2)">Click Here ❤️</button>
+        
+        <button class="btn-next" onclick="nextPage(2)">
+            Click Here 💖
+        </button>
     </div>
 
     <!-- ================= TRANG 2 ================= -->
     <div class="page" id="page2">
-        <div class="wishes">
-            <h2>To You, My Princess ✨</h2>
-            <p>Chúc mừng sinh nhật cô gái tuyệt vời nhất thế giới! 🌸</p>
-            <p style="margin-top: 10px;">Chúc em tuổi mới luôn tràn ngập nụ cười, hạnh phúc và gặp thật nhiều may mắn. Cảm ơn em vì đã đến và sưởi ấm trái tim anh.</p>
+        <div class="wishes-box">
+            <h2>To You! 🌸</h2>
+            <p>Chúc mừng sinh nhật thiên thần nhỏ của chị! Hôm nay là một ngày cực kỳ đặc biệt, ngày mà một cô bé đáng yêu đã xuất hiện trên thế giới này.</p>
+            <p style="margin-top: 12px;">Chúc em tuổi mới luôn tràn ngập niềm vui, cười nhiều hơn mỗi ngày, luôn xinh đẹp và tự tin bước đi trên con đường mình chọn. Cảm ơn em đã ở bên cạnh và mang lại hạnh phúc cho anh! 🥰</p>
         </div>
-        <button class="btn-next" onclick="nextPage(3)">Xem tiếp nè ➔</button>
+        <button class="btn-next" onclick="nextPage(3)">
+            Bấm để xem quà tiếp theo ➔
+        </button>
     </div>
 
     <!-- ================= TRANG 3 ================= -->
     <div class="page" id="page3">
-        <h2 style="color: #ff4b6e; font-size: 1.5rem;">Khoảnh Khắc Của Chúng Mình 💕</h2>
+        <h2 style="color: #ff4b6e; font-size: 1.5rem; margin-bottom: 5px;">Khoảnh Khắc Của Chúng Mình 💕</h2>
+        <p style="color: #777; font-size: 0.9rem; margin-bottom: 10px;">Thế giới của anh thu nhỏ lại vừa bằng em</p>
+        
         <div class="photo-frame">
-            <!-- Thay link ảnh của 2 bạn vào chỗ dấu # này nhé -->
-            <img src="https://unsplash.com" alt="Ảnh của chúng mình">
+            <!-- Thay link ảnh của hai bạn vào thuộc tính src dưới đây -->
+            <img src="https://unsplash.com" alt="Ảnh kỷ niệm của hai đứa">
         </div>
-        <p style="color: #555; margin-top: 15px; font-weight: bold;">Yêu em rất nhiều! 🥰</p>
-        <button class="btn-next" onclick="nextPage(1)" style="background: #aaa;">Xem lại từ đầu ↺</button>
+        
+        <h3 style="color: #ff4b6e; margin-top: 15px; font-size: 1.3rem;">Yêu em thật nhiều! 😘</h3>
+        <button class="btn-next" onclick="nextPage(1)" style="background: linear-gradient(45deg, #bbb, #999); box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+            Xem lại từ đầu ↺
+        </button>
     </div>
 
-    <!-- SCRIPT ĐIỀU HƯỚNG VÀ HIỆU ỨNG -->
+    <!-- SCRIPT CHUYỂN TRANG MƯỢT MÀ VÀ TẠO TIM BAY -->
     <script>
-        // Hàm chuyển trang mượt mà
+        // Hàm xử lý ẩn/hiện trang mượt mà
         function nextPage(pageNumber) {
-            // Ẩn tất cả các trang
+            // Loại bỏ class hoạt động ở tất cả các trang
             document.querySelectorAll('.page').forEach(page => {
                 page.classList.remove('active');
             });
-            // Hiển thị trang được chọn
+            // Kích hoạt hiển thị cho trang tiếp theo
             document.getElementById('page' + pageNumber).classList.add('active');
+            
+            // Bắn một loạt tim chúc mừng khi chuyển trang
+            for (let i = 0; i < 8; i++) {
+                setTimeout(createHeart, i * 80);
+            }
         }
 
-        // Tự động tạo tim bay nền lãng mạn
+        // Hàm tạo các hạt trái tim rơi tự động lãng mạn
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('heart-particle');
-            const heartTypes = ['❤️', '💖', '💗', '🌸', '✨'];
-            heart.innerText = heartTypes[Math.floor(Math.random() * heartTypes.length)];
+            
+            // Ngẫu nhiên các ký tự dễ thương
+            const heartIcons = ['❤️', '💖', '💗', '🌸', '✨', '🎈'];
+            heart.innerText = heartIcons[Math.floor(Math.random() * heartIcons.length)];
+            
+            // Thiết lập tọa độ ngang ngẫu nhiên trên toàn màn hình
             heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.fontSize = Math.random() * 15 + 15 + 'px';
-            heart.style.animationDuration = Math.random() * 2 + 3 + 's';
+            
+            // Kích thước ngẫu nhiên để tạo chiều sâu
+            heart.style.fontSize = Math.random() * 18 + 14 + 'px';
+            
+            // Thời gian bay ngẫu nhiên từ 3 đến 5.5 giây
+            heart.style.animationDuration = Math.random() * 2.5 + 3 + 's';
+            
             document.body.appendChild(heart);
-            setTimeout(() => { heart.remove(); }, 5000);
+            
+            // Dọn dẹp DOM sau khi hiệu ứng kết thúc để tránh lag trang
+            setTimeout(() => { 
+                heart.remove(); 
+            }, 5500);
         }
-        setInterval(createHeart, 300);
+        
+        // Cứ mỗi 350 mili giây sẽ tự tạo 1 trái tim bay lên
+        setInterval(createHeart, 350);
     </script>
 </body>
 </html>
