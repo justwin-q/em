@@ -69,13 +69,13 @@ const ROSE_PALETTES = {
  * Friendly, cheerful, non-cheesy 20/10 wishes displayed when roses bloom
  */
 const WHISPER_NOTES = [
-  'Chúc bạn một ngày 20/10 ngập tràn yêu thương và những bất ngờ nho nhỏ.',
-  'Mong bạn luôn được lắng nghe, trân trọng và yêu thương theo cách mình xứng đáng.',
-  'Chúc bạn đủ bình yên để nghỉ ngơi, đủ tự tin để theo đuổi điều mình thích.',
-  'Một bông hoa dành cho nụ cười của bạn. Hôm nay nhớ vui thật nhiều nhé!',
-  'Chúc những dự định của bạn sớm đơm hoa, từng chút một, theo nhịp của riêng mình.',
-  'Mong mỗi ngày của bạn đều có một lý do thật nhỏ để mỉm cười.',
-  'Chúc bạn luôn khỏe mạnh, an yên và có thật nhiều thời gian cho chính mình.'
+  'Chúc em ngày 20/10 ngập tràn yêu thương',
+  'Mong em luôn được lắng nghe, trân trọng và yêu thương theo cách xứng đáng.',
+  'Chúc em có đủ bình yên để nghỉ ngơi, đủ tự tin để theo đuổi điều mình thích.',
+  'Một bông hoa dành cho nụ cười của em. Em đẹp lắm',
+  'Chúc những dự định của em sớm đơm hoa, từng chút một.',
+  'Mong mỗi ngày của em đều có một lý do thật nhỏ để mỉm cười, hi vọng có mình ở đó.',
+  'Chúc em luôn khỏe mạnh và có thật nhiều thời gian cho chính mình.'
 ];
 
 /**
