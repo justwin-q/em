@@ -4,8 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#bbdff5">
-  <meta name="description" content="Chạm một bông hoa, đánh thức cả khu vườn và nhận một lời chúc dịu dàng ngày 20/10.">
-  <title>Cả một vườn thương · 20/10</title>
+  <meta name="description" content="Chạm một bông hoa và nhận một lời chúc từ mình.">
   <link rel="preload" href="./assets/fonts/noto-serif-regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="./assets/fonts/noto-sans-regular.woff2" as="font" type="font/woff2" crossorigin>
   <style>
@@ -159,15 +158,12 @@
 <body>
   <main class="garden" id="garden">
     <header class="page-header">
-      <p class="dedication">Dành bạn, cả một vườn thương.</p>
-      <p class="date"><span>20 / 10</span>Ngày Phụ nữ Việt Nam</p>
+      <p class="dedication">Dành tặng em.</p>
+      <p class="date"><span>20 / 10</span>Ngày của Em</p>
     </header>
     <canvas id="flowers" aria-hidden="true"></canvas>
     <button class="flower-button" id="bloom" type="button" aria-label="Chạm để cả vườn hoa nở" aria-describedby="introHint"></button>
     <div class="intro" id="intro">
-      <h1>Từ một bông hoa nhỏ…</h1>
-      <p id="introHint">Chạm vào hoa, một điều dịu dàng đang chờ bạn.</p>
-    </div>
     <p class="progress" id="status" role="status" aria-live="polite" aria-atomic="true"></p>
     <nav class="garden-actions" id="actions" aria-label="Vườn hoa và thiệp" hidden>
       <button id="readCard" type="button" aria-haspopup="dialog" aria-controls="wishCard">Đọc lại thiệp</button>
@@ -187,14 +183,13 @@
           </g>
         </svg>
         <div id="cardReading">
-          <p class="recipient">Gửi <span id="cardRecipient">bạn thương mến</span>,</p>
-          <h2 id="cardTitle">Mong những điều đẹp đẽ<br>luôn nở bên bạn.</h2>
+          <p class="recipient">Gửi <span id="cardRecipient">em thương mến</span>,</p>
+          <h2 id="cardTitle">Mong những điều đẹp đẽ<br>luôn nở bên em.</h2>
           <div id="cardMessage">
-            <p class="message">Một bông hoa có thể làm một ngày thêm đẹp.<br>Còn bạn, làm thế giới này dịu dàng hơn.</p>
-            <p class="message">Nhân ngày 20/10, chúc bạn luôn được yêu thương, trân trọng và có thật nhiều niềm vui. Mong bạn đủ bình yên để tận hưởng những điều nhỏ bé, đủ tự tin để theo đuổi những điều mình yêu.</p>
-            <p class="message">Hôm nay và cả những ngày sau,<br>hãy cứ rạng rỡ theo cách của riêng mình nhé.</p>
+            <p class="message">Nhân ngày 20/10, chúc em luôn được yêu thương, trân trọng và có thật nhiều niềm vui. Mong em đủ bình yên, đủ tự tin để theo đuổi những điều mình yêu.</p>
+            <p class="message">Hôm nay và cả những ngày sau,<br>hãy cứ nở nụ cười nhé.</p>
           </div>
-          <p class="signature" id="cardSignature">Gửi bạn thật nhiều thương mến ♡</p>
+          <p class="signature" id="cardSignature">Gửi em thật nhiều thương mến ♡</p>
           <div class="letter-actions">
             <button class="view-garden" id="viewGarden" type="button" autofocus>Ngắm vườn hoa</button>
             <button class="view-garden" id="editCard" type="button">Viết lời chúc riêng</button>
@@ -219,7 +214,7 @@
         <p class="card-status" id="cardStatus" role="status" aria-live="polite"></p>
       </article>
     </dialog>
-    <noscript><p class="noscript">Bật JavaScript để chạm vào hoa và mở thiệp nhé.<br>Chúc bạn ngày 20/10 bình an, rạng rỡ và tràn đầy yêu thương!</p></noscript>
+    <noscript><p class="noscript">Bật JavaScript để chạm vào hoa và mở thiệp nhé.<br>Chúc em ngày 20/10 bình an, rạng rỡ và tràn đầy yêu thương!</p></noscript>
   </main>
   <script src="./garden-botany.js"></script>
   <script src="./garden-card.js"></script>
