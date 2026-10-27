@@ -957,74 +957,7 @@
 
 
         /* ==========================================================================
-           3. ENVELOPE & EDITABLE CARD
-           ========================================================================== */
-        let isEnvelopeOpen = false;
-
-        function toggleEnvelope() {
-            const env = document.getElementById('interactiveEnvelope');
-            isEnvelopeOpen = !isEnvelopeOpen;
-            if (isEnvelopeOpen) {
-                env.classList.add('open');
-                playChimeSound();
-            } else {
-                env.classList.remove('open');
-            }
-        }
-
-        function toggleEditCardModal() {
-            const modal = document.getElementById('editCardModal');
-            modal.classList.toggle('modal-active');
-        }
-
-        function saveCardChanges() {
-            const rec = document.getElementById('inputRecipient').value;
-            const title = document.getElementById('inputTitle').value;
-            const body = document.getElementById('inputBody').value;
-
-            document.getElementById('cardRecipient').textContent = rec;
-            document.getElementById('cardTitle').textContent = title;
-            document.getElementById('cardBody').textContent = `"${body}"`;
-
-            toggleEditCardModal();
-            playChimeSound();
-        }
-
-
-        /* ==========================================================================
-           4. MEMORY PHOTO ALBUM & UPLOADER
-           ========================================================================== */
-        let isAlbumFanned = true;
-
-        function toggleAlbumLayout() {
-            const container = document.getElementById('albumContainer');
-            const label = document.getElementById('albumToggleText');
-            isAlbumFanned = !isAlbumFanned;
-
-            if (isAlbumFanned) {
-                container.classList.remove('stacked');
-                container.classList.add('fanned');
-                label.textContent = "Gấp Album";
-            } else {
-                container.classList.remove('fanned');
-                container.classList.add('stacked');
-                label.textContent = "Xòe Album";
-            }
-            playChimeSound();
-        }
-
-        function uploadAlbumPhoto(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('imgCard1').src = e.target.result;
-                playChimeSound();
-            };
-            reader.readAsDataURL(file);
-        }
-
+          
 
         /* ==========================================================================
            5. AUDIO & SPARKLES
@@ -1075,17 +1008,6 @@
             } catch (e) {}
         }
 
-        function toggleAudio() {
-            initAudio();
-            const text = document.getElementById('musicText');
-            if (!isMusicPlaying) {
-                isMusicPlaying = true;
-                text.textContent = "Nhạc Nền Đã Bật 🎵";
-                playBirthdayMelody();
-            } else {
-                isMusicPlaying = false;
-                text.textContent = "Bật Nhạc Nền Sinh Nhật 🎵";
-            }
         }
 
         function initSparkleBg() {
