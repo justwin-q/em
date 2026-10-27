@@ -1,133 +1,1128 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#fff8fa">
-  <meta name="description" content="CHÚC VỢ YÊU SINH NHẬT VUI Ạ">
-  <title>HOA TẶNG VỢ</title>
-  <link rel="stylesheet" href="./style.css">
-  <script src="./script.js" defer></script>
-  <script src="./card.js" defer></script>
-  <script src="./album.js" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quà Sinh Nhật Muộn Dành Tặng Vợ Yêu 🎂✨</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        skyPastel: '#e0f2fe',
+                        skySoft: '#bae6fd',
+                        skyBright: '#38bdf8',
+                        skyDeep: '#0284c7',
+                        skyDark: '#0369a1',
+                        sapphire: '#1e40af',
+                    },
+                    fontFamily: {
+                        serif: ['Noto Serif', 'serif'],
+                        hand: ['Dancing Script', 'cursive'],
+                        sans: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts & Font Awesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Montserrat:wght@400;500;600;700&family=Noto+Serif:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Base page styling */
+        body {
+            background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 45%, #ffffff 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: #1e293b;
+        }
+
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1.5px solid rgba(186, 230, 253, 0.7);
+            box-shadow: 0 12px 32px -6px rgba(56, 189, 248, 0.18);
+        }
+
+        /* Ambient background sparkles */
+        .bg-sparkle {
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: floatSparkle 9s infinite linear;
+        }
+
+        @keyframes floatSparkle {
+            0% { transform: translateY(105vh) scale(0); opacity: 0; }
+            50% { opacity: 0.85; }
+            100% { transform: translateY(-10vh) scale(1.3); opacity: 0; }
+        }
+
+        /* 3D Folding Envelope */
+        .envelope-wrapper {
+            perspective: 1000px;
+        }
+
+        .envelope {
+            position: relative;
+            width: 100%;
+            max-width: 380px;
+            height: 240px;
+            background: #bae6fd;
+            border-radius: 14px;
+            box-shadow: 0 16px 36px rgba(2, 132, 199, 0.22);
+            cursor: pointer;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .envelope:hover {
+            transform: translateY(-6px);
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 190px solid transparent;
+            border-right: 190px solid transparent;
+            border-top: 135px solid #7dd3fc;
+            transform-origin: top;
+            transition: transform 0.6s ease-in-out, z-index 0.2s ease;
+            z-index: 4;
+        }
+
+        .envelope.open .envelope-flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        .envelope-pocket {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 190px solid #bae6fd;
+            border-right: 190px solid #bae6fd;
+            border-bottom: 125px solid #38bdf8;
+            border-radius: 0 0 14px 14px;
+            z-index: 3;
+        }
+
+        .letter {
+            position: absolute;
+            bottom: 12px;
+            left: 4%;
+            width: 92%;
+            height: 215px;
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 18px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+            transition: transform 0.6s ease-in-out, opacity 0.4s ease, height 0.4s ease;
+            z-index: 2;
+            border: 2px dashed #7dd3fc;
+            overflow: hidden;
+        }
+
+        .envelope.open .letter {
+            transform: translateY(-130px) scale(1.04);
+            z-index: 5;
+            height: auto;
+            max-height: 520px;
+            box-shadow: 0 22px 45px rgba(2, 132, 199, 0.28);
+        }
+
+        /* Candle Flame Flicker & Glow */
+        .candle-flame {
+            width: 14px;
+            height: 24px;
+            background: linear-gradient(to bottom, #fffbeb, #fde047, #f97316);
+            border-radius: 50% 50% 35% 35%;
+            position: absolute;
+            top: -24px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 14px #fde047, 0 0 28px #f97316;
+            animation: flameFlicker 0.15s infinite alternate ease-in-out;
+            cursor: pointer;
+        }
+
+        @keyframes flameFlicker {
+            0% { transform: translateX(-50%) scale(1) rotate(-1.5deg); opacity: 0.92; }
+            100% { transform: translateX(-50%) scale(1.15) rotate(1.5deg); opacity: 1; }
+        }
+
+        /* Smoke Particle Animation */
+        .smoke-particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: rgba(148, 163, 184, 0.6);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: smokeRise 1.5s ease-out forwards;
+        }
+
+        @keyframes smokeRise {
+            0% { transform: translateY(0) scale(1); opacity: 0.8; }
+            100% { transform: translateY(-40px) scale(3); opacity: 0; }
+        }
+
+        /* Photo Album Fan-out and Stack States */
+        .album-container.stacked .album-card:nth-child(1) { transform: rotate(-2deg) translate(0, 0); z-index: 3; }
+        .album-container.stacked .album-card:nth-child(2) { transform: rotate(3deg) translate(8px, 6px); z-index: 2; }
+        .album-container.stacked .album-card:nth-child(3) { transform: rotate(-4deg) translate(-8px, 12px); z-index: 1; }
+
+        .album-container.fanned .album-card {
+            transform: rotate(0deg) translate(0, 0) !important;
+            z-index: 10 !important;
+        }
+
+        /* Modal Pop-in */
+        .modal-active {
+            display: flex !important;
+            animation: modalPop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes modalPop {
+            from { opacity: 0; transform: scale(0.85); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
 </head>
-<body>
-  <main>
-    <a class="garden-link" href="./garden.html">Ngắm vườn hoa <span aria-hidden="true">❀</span></a>
-    <canvas id="ambientPetalsCanvas" aria-hidden="true"></canvas>
-    <header class="greeting">
-      <p class="occasion"><span>CHÚC VỢ 20/10 HẠNH PHÚC</span></p>
-      <h1>MỘT BÓ HOA NHỎ,<br>LƯU GIỮ NGÀN YÊU THƯƠNG CHO EM.</h1>
-      <p class="greeting-caption">I LOVE YOU</p>
+<body class="font-sans relative selection:bg-skyBright selection:text-white">
+
+    <!-- Ambient Sparkles -->
+    <div id="sparklesBg" class="fixed inset-0 pointer-events-none z-0 overflow-hidden"></div>
+
+    <!-- Fullscreen Fireworks / Confetti Canvas -->
+    <canvas id="fxCanvas" class="fixed inset-0 pointer-events-none z-50"></canvas>
+
+    <!-- Header Section -->
+    <header class="relative z-10 w-full pt-8 pb-4 px-4 text-center">
+        <div class="max-w-4xl mx-auto space-y-3">
+            <span class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-sky-100 text-skyDark text-xs font-semibold tracking-wider uppercase border border-sky-200 shadow-sm animate-bounce">
+                ✨ Happy Birthday My Love ✨
+            </span>
+            <h1 class="font-serif text-3xl md:text-5xl font-bold text-skyDark tracking-tight leading-tight">
+                Quà Sinh Nhật Muộn Dành Tặng <span class="font-hand text-4xl md:text-6xl text-skyBright px-1">Em</span> 🎂✨
+            </h1>
+            <p class="text-slate-600 text-sm md:text-base max-w-xl mx-auto font-medium">
+                Dù sinh nhật có qua đi, nhưng mà mình vẫn ở đây mãi mãi cùng những bông hoa xanh xanh này nè=)) 💙
+            </p>
+
+            <!-- Audio Control Button -->
+            <button id="musicToggleBtn" onclick="toggleAudio()" class="mt-2 inline-flex items-center space-x-2 px-5 py-2.5 rounded-full bg-white text-skyDark text-xs font-semibold shadow-md hover:shadow-lg border border-sky-200 transition-all transform hover:scale-105 active:scale-95">
+                <i id="musicIcon" class="fa-solid fa-music text-skyBright"></i>
+                <span id="musicText">Bật Nhạc 🎵</span>
+            </button>
+        </div>
     </header>
 
-    <div class="gift-layout">
-      <section class="scene-column" aria-label="HOA VÀ LỜI CHÚC 20/10 FOR YOU">
+    <!-- Main Content Grid -->
+    <main class="relative z-10 max-w-6xl mx-auto px-4 py-6 space-y-10">
 
+        <!-- SECTION 1: BOTANICAL BLUE ROSE CANVAS BOUQUET & ENVELOPE -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- LEFT: Botanical Canvas Rose Bouquet (7 Cols) -->
+            <div class="lg:col-span-7 glass-card rounded-3xl p-5 md:p-7 flex flex-col items-center text-center relative overflow-hidden">
+                
+                <div class="w-full flex items-center justify-between mb-3 px-2">
+                    <div class="text-left">
+                        <h2 class="font-serif text-xl font-bold text-skyDark flex items-center gap-2">
+                            <i class="fa-solid fa-seedling text-skyBright"></i> Bó Hoa Xanh Dành Tặng Em
+                        </h2>
+                        <p class="text-xs text-slate-500">Nhấp vào từng bông hoa để nhận những câu chúc</p>
+                    </div>
+                    <button onclick="rebloomBouquet()" class="px-3.5 py-1.5 rounded-xl bg-sky-100 hover:bg-sky-200 text-skyDark text-xs font-semibold border border-sky-200 transition-all flex items-center gap-1.5 shadow-sm active:scale-95">
+                        <i class="fa-solid fa-rotate-right text-skyBright"></i> Hoa Nở Lại
+                    </button>
+                </div>
 
-        <div class="gift-visuals">
-          <div class="bouquet-composition">
-            <div id="bouquetStageWrapper" role="button" tabindex="0"
-              aria-label="Bó hoa hồng. Nhấn Enter để nhận lời chúc; dùng phím mũi tên để chọn bông hoa."
-              aria-describedby="bouquetHint">
-              <canvas id="bouquetCanvas" aria-hidden="true"></canvas>
+                <!-- Flower Canvas Wrapper -->
+                <div class="relative w-full aspect-[4/5] max-h-[520px] rounded-2xl bg-gradient-to-b from-sky-50/70 via-white/80 to-sky-100/50 border border-sky-100 shadow-inner flex items-center justify-center overflow-hidden">
+                    <canvas id="gardenCanvas" class="w-full h-full cursor-pointer"></canvas>
+
+                    <!-- Whisper Speech Bubble Toast -->
+                    <div id="whisperToast" class="absolute top-6 left-1/2 -translate-x-1/2 opacity-0 pointer-events-none transition-all duration-500 transform -translate-y-3 bg-white/95 border-2 border-skyBright px-5 py-3 rounded-2xl shadow-xl text-skyDark font-semibold text-xs md:text-sm flex items-center gap-2 max-w-[90%] z-20">
+                        <i class="fa-solid fa-heart text-skyBright animate-bounce"></i>
+                        <span id="whisperText">Chúc em luôn hạnh phúc!</span>
+                    </div>
+
+                    <!-- Canvas Interactive Badge -->
+                    <div class="absolute bottom-3 right-3 bg-white/85 backdrop-blur-sm px-3 py-1 rounded-full border border-sky-200 text-[11px] text-skyDark font-medium shadow-sm pointer-events-none flex items-center gap-1">
+                        <i class="fa-solid fa-hand-pointer text-skyBright animate-pulse"></i> Chạm vào bông hoa
+                    </div>
+                </div>
+
             </div>
-            <button class="envelope-button" id="openCard" type="button" aria-haspopup="dialog" aria-controls="greetingCard" aria-expanded="false" hidden>
-              <span class="envelope" aria-hidden="true"><span class="envelope-letter">Gửi em</span><span class="envelope-seal">♡</span></span>
-              <span class="envelope-caption">Có một tấm thiệp nho nhỏ dành cho em</span>
-              <span class="envelope-action">Mở thiệp</span>
+
+            <!-- RIGHT: Interactive 3D Envelope & Editable Greeting Card (5 Cols) -->
+            <div class="lg:col-span-5 glass-card rounded-3xl p-6 md:p-8 flex flex-col items-center text-center space-y-6">
+                
+                <div class="w-full">
+                    <h2 class="font-serif text-xl font-bold text-skyDark flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-envelope-open-text text-skyBright"></i> Thiệp Chúc Mừng 
+                    </h2>
+                    <p class="text-xs text-slate-500 mt-1">Chạm vào phong bì để mở lời chúc gửi Em</p>
+                </div>
+
+                <!-- 3D Folded Envelope -->
+                <div class="envelope-wrapper w-full flex justify-center py-2">
+                    <div id="interactiveEnvelope" class="envelope" onclick="toggleEnvelope()">
+                        <div class="envelope-flap"></div>
+                        
+                        <!-- Letter Content -->
+                        <div id="letterCard" class="letter flex flex-col justify-between text-left">
+                            <div>
+                                <div class="flex items-center justify-between border-b border-sky-100 pb-2 mb-3">
+                                    <span id="cardRecipient" class="font-hand text-xl font-bold text-skyDark">Van Anh 💖</span>
+                                    <span class="text-[10px] bg-sky-100 text-skyDark px-2 py-0.5 rounded-full font-semibold">Special Edition</span>
+                                </div>
+                                <h3 id="cardTitle" class="font-serif text-xs md:text-sm font-bold text-skyDeep mb-2">Happy Late Birthday, My Baby! 🎂✨</h3>
+                                <p id="cardBody" class="text-xs text-slate-600 leading-relaxed font-serif italic">
+                                    "Chúc em tuổi mới có thật nhiều niềm vui và hạnh phúc. Mong cho em sẽ đạt được nhiều thành tích tốt trong con đường đại học và chúc em có thật nhiều sức khỏe. Mong là chúng mình sẽ đồng hành cùng nhau thật hạnh phúc trong con đường này. Mình yêu em nhiều. I love you so much my baby. 💕"
+                                </p>
+                            </div>
+                            <div class="text-right pt-2 border-t border-sky-100 flex items-center justify-between">
+                                <button onclick="event.stopPropagation(); toggleEditCardModal();" class="text-[11px] text-skyBright hover:underline font-semibold flex items-center gap-1">
+                                    <i class="fa-solid fa-pen-to-square"></i> Sửa Lời Chúc
+                                </button>
+                                <span id="cardSignature" class="font-hand text-base font-bold text-skyBright">Yêu em thật nhiều ❤️</span>
+                            </div>
+                        </div>
+
+                        <div class="envelope-pocket"></div>
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-12 h-12 bg-white rounded-full border-2 border-skyBright shadow-md flex items-center justify-center text-skyBright font-bold text-lg pointer-events-none">
+                            💙
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Action Trigger for Cake -->
+                <div class="w-full pt-2">
+                    <button onclick="scrollToCakeSection()" class="w-full py-3 px-5 rounded-2xl bg-gradient-to-r from-skyBright via-skyDeep to-skyDark text-white font-bold text-sm shadow-md hover:shadow-sky-300 hover:scale-[1.02] active:scale-98 transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-cake-candles animate-bounce"></i>
+                        <span>Đến Chiếc Bánh Sinh Nhật 🎂</span>
+                    </button>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- SECTION 2: PROMINENT INTERACTIVE BIRTHDAY CAKE SECTION ("Bánh Kem Sinh Nhật Muộn") -->
+        <section id="cakeSection" class="glass-card rounded-3xl p-6 md:p-10 text-center relative overflow-hidden">
+            <div class="max-w-2xl mx-auto space-y-4">
+                
+                <div class="space-y-1">
+                    <span class="px-3 py-1 rounded-full bg-sky-100 text-skyDark text-xs font-semibold">Special Surprise</span>
+                    <h2 class="font-serif text-2xl md:text-3xl font-bold text-skyDark">
+                        🎂 Bánh Kem Sinh Nhật Muộn Dành Cho Baby 🎂
+                    </h2>
+                    <p class="text-xs md:text-sm text-slate-500">
+                        Chạm vào ngọn nến hoặc nhấn nút bên dưới để thổi nến và nhận điều ước ngọt ngào!
+                    </p>
+                </div>
+
+                <!-- 3D Interactive CSS Birthday Cake Layer -->
+                <div class="relative w-64 h-52 mx-auto my-6 flex flex-col items-center justify-end select-none">
+                    
+                    <!-- Candles Container -->
+                    <div class="flex gap-4 mb-0.5 z-20">
+                        <!-- Candle 1 -->
+                        <div class="relative w-3.5 h-12 bg-gradient-to-b from-sky-200 to-skyBright rounded-sm shadow-sm">
+                            <div class="w-0.5 h-2 bg-slate-700 mx-auto -mt-2"></div>
+                            <div id="candleFlame1" class="candle-flame" onclick="blowSingleCandle(1)"></div>
+                        </div>
+                        <!-- Candle 2 (Center Big) -->
+                        <div class="relative w-4 h-14 bg-gradient-to-b from-white via-sky-200 to-skyDeep rounded-sm shadow-sm">
+                            <div class="w-0.5 h-2 bg-slate-700 mx-auto -mt-2"></div>
+                            <div id="candleFlame2" class="candle-flame" onclick="blowSingleCandle(2)"></div>
+                        </div>
+                        <!-- Candle 3 -->
+                        <div class="relative w-3.5 h-12 bg-gradient-to-b from-sky-200 to-skyBright rounded-sm shadow-sm">
+                            <div class="w-0.5 h-2 bg-slate-700 mx-auto -mt-2"></div>
+                            <div id="candleFlame3" class="candle-flame" onclick="blowSingleCandle(3)"></div>
+                        </div>
+                    </div>
+
+                    <!-- Top Tier -->
+                    <div class="w-40 h-16 bg-gradient-to-r from-sky-100 via-white to-sky-200 rounded-t-2xl border-b-4 border-skyBright relative shadow-md flex items-center justify-center">
+                        <div class="absolute top-1 w-full flex justify-around px-2 text-xs">
+                            <span>🍓</span><span>💙</span><span>✨</span><span>💙</span><span>🍓</span>
+                        </div>
+                        <span class="mt-3 font-serif font-bold text-skyDeep text-xs">Tuổi Mới Rực Rỡ</span>
+                    </div>
+
+                    <!-- Bottom Tier -->
+                    <div class="w-56 h-20 bg-gradient-to-r from-skySoft via-sky-100 to-skySoft rounded-t-2xl border-b-8 border-skyDeep relative shadow-lg flex items-center justify-center">
+                        <div class="absolute top-1 w-full flex justify-around px-4 text-sm">
+                            <span>🧁</span><span>✨</span><span>💖</span><span>✨</span><span>🧁</span>
+                        </div>
+                        <span class="mt-4 font-hand font-bold text-skyDark text-xl">Phương Anh ✨</span>
+                    </div>
+
+                    <!-- Cake Stand -->
+                    <div class="w-64 h-5 bg-slate-200 rounded-full shadow-md border-t border-white"></div>
+                </div>
+
+                <!-- Interactive Buttons for Cake -->
+                <div class="flex flex-wrap justify-center gap-3 pt-2">
+                    <button id="blowCakeBtn" onclick="blowAllCandles()" class="px-6 py-3 rounded-2xl bg-gradient-to-r from-skyBright via-skyDeep to-skyDark text-white font-bold text-xs md:text-sm shadow-lg hover:shadow-sky-400/50 hover:scale-105 active:scale-95 transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-wind"></i>
+                        <span id="blowBtnLabel">Thổi Nến & Bắn Pháo Hoa 🕯️</span>
+                    </button>
+                    <button onclick="relightCandles()" class="px-5 py-3 rounded-2xl bg-sky-100 hover:bg-sky-200 text-skyDark font-bold text-xs md:text-sm border border-sky-200 shadow-sm active:scale-95 transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-fire-flame-curved text-amber-500"></i>
+                        <span>Thắp Lại Nến ✨</span>
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 3: MEMORY PHOTO ALBUM GALLERY ("CÔNG CHÚA CỦA TOI 📸") -->
+        <section class="glass-card rounded-3xl p-6 md:p-8 space-y-6">
+            
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-sky-100 pb-4">
+                <div>
+                    <h2 class="font-serif text-2xl font-bold text-skyDark flex items-center gap-2">
+                        <i class="fa-solid fa-images text-skyBright"></i> EM BÉEEE 📸
+                    </h2>
+                    <p class="text-xs md:text-sm text-slate-500">Những khoảnh khắc xinh đẹp..</p>
+                </div>
+
+                <!-- Album Controls -->
+                <div class="flex items-center gap-2">
+                    <button onclick="toggleAlbumLayout()" class="px-3.5 py-1.5 rounded-xl bg-sky-100 hover:bg-sky-200 text-skyDark text-xs font-semibold border border-sky-200 transition-all shadow-sm flex items-center gap-1.5">
+                        <i class="fa-solid fa-layer-group text-skyBright"></i> <span id="albumToggleText">Xòe Album</span>
+                    </button>
+                    <label class="cursor-pointer px-3.5 py-1.5 rounded-xl bg-skyBright hover:bg-skyDeep text-white text-xs font-semibold shadow-sm transition-all flex items-center gap-1.5">
+                        <i class="fa-solid fa-cloud-arrow-up"></i> Thay Ảnh
+                        <input type="file" accept="image/*" class="hidden" onchange="uploadAlbumPhoto(event)">
+                    </label>
+                </div>
+            </div>
+
+            <!-- Photos Grid / Fan Out Album Container -->
+            <div id="albumContainer" class="album-container fanned grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 transition-all duration-500">
+                
+                <!-- Photo Card 1 -->
+                <div class="album-card bg-white p-4 rounded-2xl shadow-md border border-sky-100 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300">
+                    <div class="relative w-full aspect-square rounded-xl overflow-hidden bg-sky-50 mb-3 border border-sky-100">
+                        <img id="imgCard1" src="https://placehold.co/600x600/e0f2fe/0284c7?text=Ph%C6%B0%C1%A1ng+Anh+%F0%9F%A4%8D" alt="Kỷ niệm 1" class="w-full h-full object-cover">
+                        <span class="absolute top-2 right-2 bg-white/80 backdrop-blur-sm px-2.5 py-0.5 rounded-full text-[10px] font-bold text-skyDark">✨ Xinh Đẹp</span>
+                    </div>
+                    <p class="font-hand text-center text-xl font-bold text-skyDark">Smile💖</p>
+                </div>
+
+                <!-- Photo Card 2 -->
+                <div class="album-card bg-white p-4 rounded-2xl shadow-md border border-sky-100 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300">
+                    <div class="relative w-full aspect-square rounded-xl overflow-hidden bg-sky-50 mb-3 border border-sky-100">
+                        <img id="imgCard2" src="https://placehold.co/600x600/bae6fd/0369a1?text=Happy+Birthday+Baby+%F0%9F%8E%82" alt="Kỷ niệm 2" class="w-full h-full object-cover">
+                        <span class="absolute top-2 right-2 bg-white/80 backdrop-blur-sm px-2.5 py-0.5 rounded-full text-[10px] font-bold text-skyDark">💯 A+ Toán Cao Cấp</span>
+                    </div>
+                    <p class="font-hand text-center text-xl font-bold text-skyDark">Cô Sinh Viên của Toi 📚</p>
+                </div>
+
+                <!-- Photo Card 3 -->
+                <div class="album-card bg-white p-4 rounded-2xl shadow-md border border-sky-100 hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300">
+                    <div class="relative w-full aspect-square rounded-xl overflow-hidden bg-sky-50 mb-3 border border-sky-100">
+                        <img id="imgCard3" src="https://placehold.co/600x600/38bdf8/ffffff?text=C%C3%B9ng+Nhau+B%C6%B0%E1%BB%9Bc+Ti%E1%BA%BFp+%F0%9F%92%93" alt="Kỷ niệm 3" class="w-full h-full object-cover">
+                        <span class="absolute top-2 right-2 bg-white/80 backdrop-blur-sm px-2.5 py-0.5 rounded-full text-[10px] font-bold text-skyDark">💕 Happy</span>
+                    </div>
+                    <p class="font-hand text-center text-xl font-bold text-skyDark">Bên Nhau Thật Lâu 👩‍❤️‍👨</p>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Modal 1: Sweet Birthday Wish Result Modal (Triggered by Cake) -->
+    <div id="cakeResultModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+        <div class="glass-card bg-white/95 rounded-3xl max-w-md w-full p-6 md:p-8 text-center relative shadow-2xl border-2 border-skyBright/60">
+            <button onclick="closeCakeResultModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-sky-100 text-skyDark hover:bg-sky-200 flex items-center justify-center transition-all">
+                <i class="fa-solid fa-xmark"></i>
             </button>
-          </div>
 
+            <div class="text-5xl mb-2 animate-bounce">🎂✨</div>
+            <h2 class="font-serif text-2xl font-bold text-skyDark mb-2">Lời Chúc Trao Phương Anh</h2>
+            <p class="text-xs text-slate-500 mb-5">Ước nguyện sinh nhật đã được chắp cánh tới các vì sao ✨</p>
+
+            <div class="bg-sky-50 p-4 rounded-2xl border border-sky-100 text-left space-y-2 mb-6">
+                <p class="text-xs md:text-sm text-slate-700 leading-relaxed font-serif italic">
+                    "Chúc em bé <b>Phương Anh</b> tuổi mới luôn tràn ngập niềm vui, sức khỏe dồi dào, đạt điểm A tuyệt đối môn Toán Cao Cấp và luôn luôn hạnh phúc bên anh nhé! 💖"
+                </p>
+                <div class="text-right text-xs font-bold text-skyBright">I love you so much my baby! 💕</div>
+            </div>
+
+            <button onclick="closeCakeResultModal()" class="w-full py-3 rounded-2xl bg-gradient-to-r from-skyBright to-skyDeep text-white font-bold text-sm shadow-md hover:scale-[1.02] active:scale-95 transition-all">
+                Cảm Ơn Anh Yêu 💙
+            </button>
         </div>
+    </div>
 
-        <footer class="scene-footer">
-          <p id="bouquetHint" class="bouquet-hint">Chạm một bông hoa để nhận lời chúc từ mình</p>
-          <p id="roseWish" class="rose-wish" role="status" aria-live="polite" aria-atomic="true"></p>
-          <button class="text-button" id="replayBloom" type="button">Hoa nở lại <span aria-hidden="true">↻</span></button>
-        </footer>
-      </section>
+    <!-- Modal 2: Edit Greeting Card Modal -->
+    <div id="editCardModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+        <div class="glass-card bg-white/95 rounded-3xl max-w-md w-full p-6 text-left relative shadow-2xl border-2 border-skyBright/60 space-y-4">
+            <div class="flex justify-between items-center border-b border-sky-100 pb-2">
+                <h3 class="font-serif font-bold text-skyDark">Tùy Chỉnh Lời Chúc</h3>
+                <button onclick="toggleEditCardModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i></button>
+            </div>
 
-      <dialog id="greetingCard" class="card-dialog" aria-labelledby="cardTitle">
-        <div class="letter-paper">
-          <button class="close-button" id="closeCard" type="button" aria-label="Đóng thiệp">×</button>
-          <div id="cardReading">
-            <div class="letter-date" aria-label="Ngày 20 tháng 10"><span>20</span><span class="date-stem" aria-hidden="true"></span><span>10</span></div>
-            <p class="letter-recipient">Gửi <span id="cardRecipient">bạn</span>,</p>
-            <h2 id="cardTitle">Chúc em một ngày<br>thật nhiều yêu thương.</h2>
-            <div class="letter-flower" aria-hidden="true">❀</div>
-            <p id="cardMessage" class="letter-message"></p>
-            <div class="letter-signoff"><p>Với thật nhiều thương mến,</p><p id="cardSender" class="letter-signature"></p></div>
-            <div class="letter-fold" aria-hidden="true"></div>
-            <div class="letter-actions"><button id="viewAlbum" class="text-button" type="button" aria-controls="memoryAlbum">Xem album kỷ niệm <span aria-hidden="true">♡</span></button><button id="editCard" class="text-button" type="button">Viết lời chúc riêng <span aria-hidden="true">✎</span></button></div>
-          </div>
-          <form id="cardEditor" hidden>
-            <div class="editor-actions"><button class="primary-button" type="submit">Lưu lời chúc</button><button class="text-button" id="cancelEdit" type="button">Hủy</button></div>
-          </form>
-          <p id="cardStatus" class="card-status" role="status" aria-live="polite"></p>
+            <div class="space-y-3 text-xs">
+                <div>
+                    <label class="block font-semibold text-slate-600 mb-1">Tên người nhận:</label>
+                    <input type="text" id="inputRecipient" value="Phương Anh 💖" class="w-full p-2.5 rounded-xl border border-sky-200 focus:outline-none focus:border-skyBright">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-600 mb-1">Tiêu đề thiệp:</label>
+                    <input type="text" id="inputTitle" value="Happy Late Birthday, My Baby! 🎂✨" class="w-full p-2.5 rounded-xl border border-sky-200 focus:outline-none focus:border-skyBright">
+                </div>
+                <div>
+                    <label class="block font-semibold text-slate-600 mb-1">Nội dung lời chúc:</label>
+                    <textarea id="inputBody" rows="4" class="w-full p-2.5 rounded-xl border border-sky-200 focus:outline-none focus:border-skyBright">Chúc em tuổi mới có thật nhiều niềm vui và hạnh phúc. Mong cho em sẽ đạt được nhiều thành tích tốt trong con đường đại học và chúc em có thật nhiều sức khỏe. Mong là chúng mình sẽ đồng hành cùng nhau thật hạnh phúc trong con đường này. Mình yêu em nhiều. I love you so much my baby. 💕</textarea>
+                </div>
+            </div>
+
+            <div class="flex gap-2 pt-2">
+                <button onclick="saveCardChanges()" class="flex-1 py-2.5 rounded-xl bg-skyBright text-white font-bold text-xs shadow-md hover:bg-skyDeep transition-all">Lưu Lại</button>
+                <button onclick="toggleEditCardModal()" class="px-4 py-2.5 rounded-xl bg-slate-100 text-slate-600 font-semibold text-xs">Hủy</button>
+            </div>
         </div>
-      </dialog>
     </div>
-    <section id="memoryAlbum" class="memory-album" aria-labelledby="albumTitle" hidden>
-      <header class="album-heading">
-        <p class="album-note">Một chút kỷ niệm dành cho em</p>
-        <h2 id="albumTitle">Cute thíaaaa</h2>
-        <button id="toggleAlbum" class="text-button" type="button" aria-expanded="false" aria-controls="albumPhotos">Xòe album <span aria-hidden="true">♡</span></button>
-        <button id="editAlbum" class="text-button" type="button" aria-expanded="false" aria-controls="albumPhotos">Thay ảnh <span aria-hidden="true">✎</span></button>
-      </header>
-      <div id="albumPhotos" class="album-photos">
-        <figure class="portrait-card album-card">
-          <div class="portrait-photo"><img src="./assets/portrait-placeholder.webp" alt="Ảnh kỷ niệm thứ nhất của người nhận thiệp" width="768" height="1024" decoding="async"></div>
-          <figcaption><span class="portrait-dedication">Cười xinhhhh.</span><span class="portrait-date">so beautiful</span></figcaption>
-        </figure>
-        <figure class="portrait-card album-card">
-          <div class="portrait-photo"><img src="./assets/portrait-placeholder.webp" alt="Ảnh kỷ niệm thứ hai của người nhận thiệp" width="768" height="1024" decoding="async" loading="lazy"></div>
-          <figcaption><span class="portrait-dedication">Bình yên từ điều nhỏ.</span><span class="portrait-date">Một khoảnh khắc dịu dàng</span></figcaption>
-          <div class="photo-actions" hidden>
-            <button class="text-button change-photo" type="button" aria-label="Đổi ảnh thứ hai">Đổi ảnh</button>
-            <button class="text-button reset-photo" type="button" aria-label="Khôi phục ảnh thứ hai" disabled>Ảnh ban đầu</button>
-            <input class="photo-input" type="file" accept="image/*" aria-label="Chọn ảnh thứ hai" hidden>
-          </div>
-        </figure>
-        <figure class="portrait-card album-card">
-          <div class="portrait-photo"><img src="./assets/portrait-placeholder.webp" alt="Ảnh kỷ niệm thứ ba của người nhận thiệp" width="768" height="1024" decoding="async" loading="lazy"></div>
-          <figcaption><span class="portrait-dedication">Mong em luôn rạng rỡ.</span><span class="portrait-date">Hôm nay và cả mai sau</span></figcaption>
-          <div class="photo-actions" hidden>
-            <button class="text-button change-photo" type="button" aria-label="Đổi ảnh thứ ba">Đổi ảnh</button>
-            <button class="text-button reset-photo" type="button" aria-label="Khôi phục ảnh thứ ba" disabled>Ảnh ban đầu</button>
-            <input class="photo-input" type="file" accept="image/*" aria-label="Chọn ảnh thứ ba" hidden>
-          </div>
-        </figure>
-      </div>
-    </section>
-    <noscript><p class="noscript-message">ngắm hoa nở và mở thiệp 20/10 nhé.</p></noscript>
-  
- </main>
-  <!-- Nút & Modal Bánh Kem Sinh Nhật Muộn -->
-<div style="text-align: center; margin: 20px 0;">
-    <button class="cake-btn-trigger" onclick="openCakeModal()">🎂 Nhấp vào đây để xem Bánh Kem cho Phương Anh! 🎉</button>
-</div>
 
-<div id="cakeModal" class="cake-modal" onclick="closeCakeModal(event)">
-    <div class="cake-box" onclick="event.stopPropagation()">
-        <h2 style="color: #0284c7; margin-top: 0; font-family: 'Noto Serif', serif;">Happy Birthday Phương Anh! 🎂✨</h2>
-        <div style="font-size: 70px; margin: 15px 0;">🎂🎉✨</div>
-        <p style="color: #334155; font-size: 15px; line-height: 1.6;">
-            Chúc em bé <b>Phương Anh</b> tuổi mới luôn tràn ngập niềm vui, học cực giỏi, đạt điểm A môn Toán Cao Cấp và mãi mãi hạnh phúc bên anh nhé! 💙
-        </p>
-        <button class="cake-btn-trigger" style="margin-top: 15px;" onclick="closeCakeModal(null)">Thắp nến & Đóng 🕯️</button>
-    </div>
-</div>
+    <!-- Footer -->
+    <footer class="relative z-10 w-full py-8 text-center text-xs text-slate-500 space-y-1">
+        <p class="font-semibold text-skyDark">Thiết kế gửi tặng riêng cho Phương Anh 💙</p>
+        <p class="text-slate-400">Happy Late Birthday, My Baby! I love you so much my baby. 💕</p>
+    </footer>
 
-<script>
-function openCakeModal() {
-    document.getElementById('cakeModal').style.display = 'flex';
-}
-function closeCakeModal(e) {
-    if (!e || e.target === document.getElementById('cakeModal') || e.target.tagName === 'BUTTON') {
-        document.getElementById('cakeModal').style.display = 'none';
-    }
-}
-</script>
+    <!-- JavaScript Application Logic -->
+    <script>
+        /* ==========================================================================
+           1. BOTANICAL CANVAS BLUE ROSE BOUQUET ENGINE (ORIGINAL CODE REPO AESTHETIC)
+           ========================================================================== */
+        const canvas = document.getElementById('gardenCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const WHISPER_NOTES = [
+            "Chúc em được điểm A môn toán cao cấp 💯",
+            "Chúc em có thật nhiều niềm vui 🌟",
+            "Chúc em luôn xinh đẹp ✨",
+            "Chúc em có thật nhiều sức khỏe 💪",
+            "I love you so much my baby 💖",
+            "Tuổi mới rực rỡ nhé Phương Anh 🎂",
+            "Cùng nhau bước tiếp thật lâu nhé 💕"
+        ];
+
+        let roses = [];
+        let floatingPetals = [];
+        let mouseX = 0, mouseY = 0;
+
+        function resizeGardenCanvas() {
+            const container = canvas.parentElement;
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+            initBotanicalBouquet();
+        }
+
+        // Vector Botany Helper
+        class Vector {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+            }
+        }
+
+        // Detailed Rose Flower Class with logarithmic petal layers
+        class BotanicalRose {
+            constructor(x, y, radius, primaryHue, note) {
+                this.x = x;
+                this.y = y;
+                this.targetRadius = radius;
+                this.radius = 0; // Growth animation
+                this.hue = primaryHue; // Sky blue range (192 - 208)
+                this.note = note;
+                this.rotation = Math.random() * Math.PI * 2;
+                this.petalLayers = 32;
+                this.swayAngle = Math.random() * Math.PI;
+            }
+
+            update() {
+                if (this.radius < this.targetRadius) {
+                    this.radius += (this.targetRadius - this.radius) * 0.06;
+                }
+                this.swayAngle += 0.02;
+            }
+
+            draw(ctx) {
+                const currentX = this.x + Math.sin(this.swayAngle) * 2;
+                const currentY = this.y + Math.cos(this.swayAngle * 0.8) * 1.5;
+
+                ctx.save();
+                ctx.translate(currentX, currentY);
+                ctx.rotate(this.rotation);
+
+                // Leaves around flower base
+                for (let i = 0; i < 4; i++) {
+                    ctx.save();
+                    ctx.rotate((i * Math.PI / 2) + 0.3);
+                    ctx.beginPath();
+                    ctx.ellipse(this.radius * 0.75, 0, this.radius * 0.45, this.radius * 0.22, 0, 0, Math.PI * 2);
+                    ctx.fillStyle = '#38bdf8';
+                    ctx.globalAlpha = 0.3;
+                    ctx.fill();
+
+                    // Leaf Vein
+                    ctx.beginPath();
+                    ctx.moveTo(0, 0);
+                    ctx.lineTo(this.radius * 1.1, 0);
+                    ctx.strokeStyle = '#0284c7';
+                    ctx.lineWidth = 1;
+                    ctx.globalAlpha = 0.4;
+                    ctx.stroke();
+                    ctx.restore();
+                }
+
+                // Layered Petal Spiral
+                for (let i = this.petalLayers; i > 0; i--) {
+                    const ratio = i / this.petalLayers;
+                    const petalRadius = this.radius * ratio;
+                    const angle = i * 0.62;
+
+                    // Gradient for deep blue core to light baby blue edges
+                    const grad = ctx.createRadialGradient(
+                        Math.cos(angle) * petalRadius * 0.25,
+                        Math.sin(angle) * petalRadius * 0.25,
+                        1,
+                        0, 0, petalRadius
+                    );
+
+                    const lightness = 42 + (1 - ratio) * 48; // Dark center, pastel outer
+                    grad.addColorStop(0, `hsl(${this.hue}, 85%, ${Math.max(22, lightness - 18)}%)`);
+                    grad.addColorStop(0.65, `hsl(${this.hue + 4}, 90%, ${lightness}%)`);
+                    grad.addColorStop(1, `hsl(${this.hue - 8}, 80%, ${Math.min(96, lightness + 12)}%)`);
+
+                    ctx.beginPath();
+                    ctx.ellipse(
+                        Math.cos(angle) * (this.radius - petalRadius) * 0.32,
+                        Math.sin(angle) * (this.radius - petalRadius) * 0.32,
+                        petalRadius,
+                        petalRadius * 0.82,
+                        angle,
+                        0,
+                        Math.PI * 2
+                    );
+
+                    ctx.fillStyle = grad;
+                    ctx.globalAlpha = 0.96;
+                    ctx.shadowColor = 'rgba(2, 132, 199, 0.18)';
+                    ctx.shadowBlur = 4;
+                    ctx.fill();
+                }
+
+                // Dewdrop highlight
+                ctx.beginPath();
+                ctx.arc(-this.radius * 0.15, -this.radius * 0.15, this.radius * 0.08, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
+                ctx.fill();
+
+                ctx.restore();
+            }
+
+            containsPoint(px, py) {
+                const dist = Math.hypot(px - this.x, py - this.y);
+                return dist <= this.targetRadius * 1.15;
+            }
+        }
+
+        // Floating Ambient Petals
+        class FloatingPetal {
+            constructor(w, h) { this.reset(w, h); }
+            reset(w, h) {
+                this.x = Math.random() * w;
+                this.y = Math.random() * h;
+                this.size = 5 + Math.random() * 7;
+                this.speedY = 0.3 + Math.random() * 0.7;
+                this.rotation = Math.random() * Math.PI * 2;
+                this.rotSpeed = (Math.random() - 0.5) * 0.03;
+                this.hue = 194 + Math.random() * 14;
+            }
+            update(w, h) {
+                this.y += this.speedY;
+                this.x += Math.sin(this.y * 0.02) * 0.5;
+                this.rotation += this.rotSpeed;
+                if (this.y > h + 15) this.reset(w, h);
+            }
+            draw(ctx) {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+                ctx.globalAlpha = 0.6;
+                ctx.fillStyle = `hsl(${this.hue}, 85%, 75%)`;
+                ctx.beginPath();
+                ctx.ellipse(0, 0, this.size, this.size * 0.55, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        function initBotanicalBouquet() {
+            roses = [];
+            floatingPetals = [];
+
+            const cx = canvas.width / 2;
+            const cy = canvas.height * 0.42;
+            const baseRadius = Math.min(canvas.width, canvas.height) * 0.11;
+
+            // Bouquet Layout (7 Sky Blue Roses)
+            const offsets = [
+                { x: 0, y: -baseRadius * 1.15, r: baseRadius * 1.05, h: 198 },
+                { x: -baseRadius * 1.1, y: -baseRadius * 0.35, r: baseRadius, h: 194 },
+                { x: baseRadius * 1.1, y: -baseRadius * 0.35, r: baseRadius, h: 202 },
+                { x: 0, y: 0, r: baseRadius * 1.18, h: 200 },
+                { x: -baseRadius * 0.95, y: baseRadius * 0.85, r: baseRadius * 0.95, h: 192 },
+                { x: baseRadius * 0.95, y: baseRadius * 0.85, r: baseRadius * 0.95, h: 205 },
+                { x: 0, y: baseRadius * 1.25, r: baseRadius * 0.9, h: 196 }
+            ];
+
+            offsets.forEach((off, i) => {
+                roses.push(new BotanicalRose(
+                    cx + off.x,
+                    cy + off.y,
+                    off.r,
+                    off.h,
+                    WHISPER_NOTES[i % WHISPER_NOTES.length]
+                ));
+            });
+
+            for (let i = 0; i < 20; i++) {
+                floatingPetals.push(new FloatingPetal(canvas.width, canvas.height));
+            }
+        }
+
+        function drawStemsAndRibbon() {
+            const cx = canvas.width / 2;
+            const cy = canvas.height * 0.42;
+            const bottomY = canvas.height * 0.92;
+
+            // Draw Stems from knot bottom up to each rose base
+            roses.forEach(rose => {
+                ctx.save();
+                ctx.beginPath();
+                ctx.moveTo(cx, bottomY - 30);
+                ctx.quadraticCurveTo(
+                    (cx + rose.x) / 2 + (rose.x > cx ? 20 : -20),
+                    (bottomY + rose.y) / 2,
+                    rose.x, rose.y + rose.targetRadius * 0.4
+                );
+                ctx.strokeStyle = '#0284c7';
+                ctx.lineWidth = 4;
+                ctx.globalAlpha = 0.5;
+                ctx.stroke();
+                ctx.restore();
+            });
+
+            // Kraft Wrapper Background
+            ctx.save();
+            ctx.beginPath();
+            ctx.moveTo(cx - 105, cy + 85);
+            ctx.lineTo(cx, bottomY);
+            ctx.lineTo(cx + 105, cy + 85);
+            ctx.closePath();
+
+            const wrapGrad = ctx.createLinearGradient(cx - 105, cy, cx + 105, bottomY);
+            wrapGrad.addColorStop(0, '#bae6fd');
+            wrapGrad.addColorStop(0.5, '#7dd3fc');
+            wrapGrad.addColorStop(1, '#0284c7');
+            ctx.fillStyle = wrapGrad;
+            ctx.shadowColor = 'rgba(2, 132, 199, 0.25)';
+            ctx.shadowBlur = 12;
+            ctx.fill();
+
+            // Silk Bow Tie
+            ctx.beginPath();
+            ctx.arc(cx - 24, cy + 125, 20, 0, Math.PI * 2);
+            ctx.arc(cx + 24, cy + 125, 20, 0, Math.PI * 2);
+            ctx.fillStyle = '#ffffff';
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(cx, cy + 125, 10, 0, Math.PI * 2);
+            ctx.fillStyle = '#38bdf8';
+            ctx.fill();
+            ctx.restore();
+        }
+
+        function renderGardenLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            drawStemsAndRibbon();
+
+            roses.forEach(r => {
+                r.update();
+                r.draw(ctx);
+            });
+
+            floatingPetals.forEach(p => {
+                p.update(canvas.width, canvas.height);
+                p.draw(ctx);
+            });
+
+            requestAnimationFrame(renderGardenLoop);
+        }
+
+        function rebloomBouquet() {
+            roses.forEach(r => r.radius = 0);
+            playChimeSound();
+        }
+
+        // Flower Tap Speech Bubble
+        canvas.addEventListener('click', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const clickY = e.clientY - rect.top;
+
+            let hit = false;
+            roses.forEach(r => {
+                if (r.containsPoint(clickX, clickY)) {
+                    showWhisperToast(r.note);
+                    hit = true;
+                    playChimeSound();
+                }
+            });
+
+            if (!hit) showWhisperToast("Phương Anh em bé luôn xinh đẹp! 💙");
+        });
+
+        function showWhisperToast(text) {
+            const toast = document.getElementById('whisperToast');
+            const textEl = document.getElementById('whisperText');
+            textEl.textContent = text;
+            toast.classList.remove('opacity-0', '-translate-y-3');
+            toast.classList.add('opacity-100', 'translate-y-0');
+
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', '-translate-y-3');
+            }, 3200);
+        }
+
+
+        /* ==========================================================================
+           2. CANDLE BLOWING & CONFETTI ENGINE
+           ========================================================================== */
+        const fxCanvas = document.getElementById('fxCanvas');
+        const fxCtx = fxCanvas.getContext('2d');
+        let fxParticles = [];
+        let candleStates = [true, true, true]; // 3 candles
+
+        function resizeFxCanvas() {
+            fxCanvas.width = window.innerWidth;
+            fxCanvas.height = window.innerHeight;
+        }
+
+        class ConfettiParticle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = 6 + Math.random() * 8;
+                this.vx = (Math.random() - 0.5) * 14;
+                this.vy = -7 - Math.random() * 11;
+                this.gravity = 0.22;
+                this.rotation = Math.random() * Math.PI * 2;
+                this.rotSpeed = (Math.random() - 0.5) * 0.2;
+                this.colors = ['#38bdf8', '#7dd3fc', '#0284c7', '#bae6fd', '#ffffff', '#ffeb3b'];
+                this.color = this.colors[Math.floor(Math.random() * this.colors.length)];
+                this.alpha = 1;
+            }
+
+            update() {
+                this.vx *= 0.98;
+                this.vy += this.gravity;
+                this.x += this.vx;
+                this.y += this.vy;
+                this.rotation += this.rotSpeed;
+                this.alpha -= 0.007;
+            }
+
+            draw(ctx) {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+                ctx.globalAlpha = Math.max(0, this.alpha);
+                ctx.fillStyle = this.color;
+                ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size);
+                ctx.restore();
+            }
+        }
+
+        function triggerConfettiExplosion() {
+            const cx = window.innerWidth / 2;
+            const cy = window.innerHeight * 0.45;
+            for (let i = 0; i < 150; i++) {
+                fxParticles.push(new ConfettiParticle(cx, cy));
+            }
+        }
+
+        function renderFxLoop() {
+            fxCtx.clearRect(0, 0, fxCanvas.width, fxCanvas.height);
+            for (let i = fxParticles.length - 1; i >= 0; i--) {
+                const p = fxParticles[i];
+                p.update();
+                p.draw(fxCtx);
+                if (p.alpha <= 0 || p.y > window.innerHeight) fxParticles.splice(i, 1);
+            }
+            requestAnimationFrame(renderFxLoop);
+        }
+
+        function blowSingleCandle(id) {
+            const flame = document.getElementById(`candleFlame${id}`);
+            if (flame && candleStates[id - 1]) {
+                flame.style.display = 'none';
+                candleStates[id - 1] = false;
+                spawnCandleSmoke(flame.parentElement);
+                playChimeSound();
+
+                // Check if all blown
+                if (!candleStates.some(state => state)) {
+                    allCandlesBlownAction();
+                }
+            }
+        }
+
+        function blowAllCandles() {
+            [1, 2, 3].forEach(id => {
+                const flame = document.getElementById(`candleFlame${id}`);
+                if (flame) {
+                    flame.style.display = 'none';
+                    spawnCandleSmoke(flame.parentElement);
+                }
+            });
+            candleStates = [false, false, false];
+            allCandlesBlownAction();
+        }
+
+        function relightCandles() {
+            [1, 2, 3].forEach(id => {
+                const flame = document.getElementById(`candleFlame${id}`);
+                if (flame) flame.style.display = 'block';
+            });
+            candleStates = [true, true, true];
+            document.getElementById('blowBtnLabel').textContent = "Thổi Nến & Bắn Pháo Hoa 🕯️";
+            playChimeSound();
+        }
+
+        function spawnCandleSmoke(parentElement) {
+            for (let i = 0; i < 5; i++) {
+                const smoke = document.createElement('div');
+                smoke.className = 'smoke-particle';
+                smoke.style.left = `${10 + Math.random() * 10}px`;
+                parentElement.appendChild(smoke);
+                setTimeout(() => smoke.remove(), 1500);
+            }
+        }
+
+        function allCandlesBlownAction() {
+            triggerConfettiExplosion();
+            playBirthdayMelody();
+            document.getElementById('blowBtnLabel').textContent = "Đã Thổi Nến ✨";
+
+            setTimeout(() => {
+                document.getElementById('cakeResultModal').classList.add('modal-active');
+            }, 600);
+        }
+
+        function closeCakeResultModal() {
+            document.getElementById('cakeResultModal').classList.remove('modal-active');
+        }
+
+        function scrollToCakeSection() {
+            document.getElementById('cakeSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+
+        /* ==========================================================================
+           3. ENVELOPE & EDITABLE CARD
+           ========================================================================== */
+        let isEnvelopeOpen = false;
+
+        function toggleEnvelope() {
+            const env = document.getElementById('interactiveEnvelope');
+            isEnvelopeOpen = !isEnvelopeOpen;
+            if (isEnvelopeOpen) {
+                env.classList.add('open');
+                playChimeSound();
+            } else {
+                env.classList.remove('open');
+            }
+        }
+
+        function toggleEditCardModal() {
+            const modal = document.getElementById('editCardModal');
+            modal.classList.toggle('modal-active');
+        }
+
+        function saveCardChanges() {
+            const rec = document.getElementById('inputRecipient').value;
+            const title = document.getElementById('inputTitle').value;
+            const body = document.getElementById('inputBody').value;
+
+            document.getElementById('cardRecipient').textContent = rec;
+            document.getElementById('cardTitle').textContent = title;
+            document.getElementById('cardBody').textContent = `"${body}"`;
+
+            toggleEditCardModal();
+            playChimeSound();
+        }
+
+
+        /* ==========================================================================
+           4. MEMORY PHOTO ALBUM & UPLOADER
+           ========================================================================== */
+        let isAlbumFanned = true;
+
+        function toggleAlbumLayout() {
+            const container = document.getElementById('albumContainer');
+            const label = document.getElementById('albumToggleText');
+            isAlbumFanned = !isAlbumFanned;
+
+            if (isAlbumFanned) {
+                container.classList.remove('stacked');
+                container.classList.add('fanned');
+                label.textContent = "Gấp Album";
+            } else {
+                container.classList.remove('fanned');
+                container.classList.add('stacked');
+                label.textContent = "Xòe Album";
+            }
+            playChimeSound();
+        }
+
+        function uploadAlbumPhoto(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('imgCard1').src = e.target.result;
+                playChimeSound();
+            };
+            reader.readAsDataURL(file);
+        }
+
+
+        /* ==========================================================================
+           5. AUDIO & SPARKLES
+           ========================================================================== */
+        let audioCtx = null;
+        let isMusicPlaying = false;
+
+        function initAudio() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+
+        function playChimeSound() {
+            try {
+                initAudio();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1046.50, audioCtx.currentTime + 0.3);
+                gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.3);
+            } catch (e) {}
+        }
+
+        function playBirthdayMelody() {
+            try {
+                initAudio();
+                const notes = [261.63, 261.63, 293.66, 261.63, 349.23, 329.63];
+                notes.forEach((freq, i) => {
+                    setTimeout(() => {
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(freq * 1.4, audioCtx.currentTime);
+                        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.28);
+                        osc.connect(gain);
+                        gain.connect(audioCtx.destination);
+                        osc.start();
+                        osc.stop(audioCtx.currentTime + 0.28);
+                    }, i * 180);
+                });
+            } catch (e) {}
+        }
+
+        function toggleAudio() {
+            initAudio();
+            const text = document.getElementById('musicText');
+            if (!isMusicPlaying) {
+                isMusicPlaying = true;
+                text.textContent = "Nhạc Nền Đã Bật 🎵";
+                playBirthdayMelody();
+            } else {
+                isMusicPlaying = false;
+                text.textContent = "Bật Nhạc Nền Sinh Nhật 🎵";
+            }
+        }
+
+        function initSparkleBg() {
+            const bg = document.getElementById('sparklesBg');
+            for (let i = 0; i < 28; i++) {
+                const sp = document.createElement('div');
+                sp.className = 'bg-sparkle bg-skyBright/40';
+                const sz = 3 + Math.random() * 6;
+                sp.style.width = `${sz}px`;
+                sp.style.height = `${sz}px`;
+                sp.style.left = `${Math.random() * 100}%`;
+                sp.style.animationDuration = `${6 + Math.random() * 7}s`;
+                sp.style.animationDelay = `${Math.random() * 5}s`;
+                bg.appendChild(sp);
+            }
+        }
+
+
+        /* ==========================================================================
+           6. INITIALIZATION
+           ========================================================================== */
+        window.addEventListener('load', () => {
+            resizeGardenCanvas();
+            resizeFxCanvas();
+            initSparkleBg();
+            renderGardenLoop();
+            renderFxLoop();
+        });
+
+        window.addEventListener('resize', () => {
+            resizeGardenCanvas();
+            resizeFxCanvas();
+        });
+    </script>
 </body>
 </html>
