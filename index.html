@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#fff8fa">
-  <meta name="description" content="CHÚC VỢ YÊU 20/10 HẠNH PHÚC">
+  <meta name="description" content="CHÚC VỢ YÊU SINH NHẬT VUI Ạ">
   <title>HOA TẶNG VỢ</title>
   <link rel="stylesheet" href="./style.css">
   <script src="./script.js" defer></script>
@@ -101,6 +101,33 @@
       </div>
     </section>
     <noscript><p class="noscript-message">ngắm hoa nở và mở thiệp 20/10 nhé.</p></noscript>
-  </main>
+  
+ </main>
+  <!-- Nút & Modal Bánh Kem Sinh Nhật Muộn -->
+<div style="text-align: center; margin: 20px 0;">
+    <button class="cake-btn-trigger" onclick="openCakeModal()">🎂 Nhấp vào đây để xem Bánh Kem cho Phương Anh! 🎉</button>
+</div>
+
+<div id="cakeModal" class="cake-modal" onclick="closeCakeModal(event)">
+    <div class="cake-box" onclick="event.stopPropagation()">
+        <h2 style="color: #0284c7; margin-top: 0; font-family: 'Noto Serif', serif;">Happy Birthday Phương Anh! 🎂✨</h2>
+        <div style="font-size: 70px; margin: 15px 0;">🎂🎉✨</div>
+        <p style="color: #334155; font-size: 15px; line-height: 1.6;">
+            Chúc em bé <b>Phương Anh</b> tuổi mới luôn tràn ngập niềm vui, học cực giỏi, đạt điểm A môn Toán Cao Cấp và mãi mãi hạnh phúc bên anh nhé! 💙
+        </p>
+        <button class="cake-btn-trigger" style="margin-top: 15px;" onclick="closeCakeModal(null)">Thắp nến & Đóng 🕯️</button>
+    </div>
+</div>
+
+<script>
+function openCakeModal() {
+    document.getElementById('cakeModal').style.display = 'flex';
+}
+function closeCakeModal(e) {
+    if (!e || e.target === document.getElementById('cakeModal') || e.target.tagName === 'BUTTON') {
+        document.getElementById('cakeModal').style.display = 'none';
+    }
+}
+</script>
 </body>
 </html>
